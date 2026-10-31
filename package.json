@@ -1,0 +1,13 @@
+{
+  "name": "boxmonitor-instagram",
+  "private": true,
+  "description": "Artes, legendas e publicação agendada do Instagram do BoxMonitor",
+  "scripts": {
+    "gerar": "node gerador/gerar.mjs",
+    "publicar": "node publicar.mjs",
+    "publicar:teste": "node publicar.mjs --dry-run"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.4"
+  }
+}

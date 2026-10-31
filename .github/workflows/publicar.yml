@@ -1,0 +1,47 @@
+name: Publicar no Instagram
+
+on:
+  schedule:
+    # 15:07 UTC = 12:07 em Brasília (sem horário de verão). O GitHub pode atrasar alguns minutos.
+    - cron: "7 15 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Só mostrar o que seria publicado"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publicar-instagram
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Publicar post vencido
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: node publicar.mjs ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Registrar publicação
+        run: |
+          if [ -z "$(git status --porcelain -- publicados.json)" ]; then
+            echo "Nada novo para registrar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add publicados.json
+          git commit -m "record published instagram post"
+          git push
