@@ -7,7 +7,7 @@ Artes, legendas e publicação automática do Instagram do BoxMonitor.
 - `publicar.mjs`: publica o próximo post vencido da `agenda.json` (1 por execução) e registra em `publicados.json`.
 - `.github/workflows/publicar.yml`: roda o `publicar.mjs` todo dia às 12:07 (Brasília).
 
-Os Reels **não** são publicados automaticamente: só a capa e o roteiro ficam em `posts/`.
+Posts com `kind: "reel"` em `conteudo.mjs` **não** são publicados automaticamente: só a capa e o roteiro ficam em `posts/`.
 
 ## Mudar textos ou datas
 

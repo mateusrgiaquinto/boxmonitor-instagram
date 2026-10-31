@@ -8,14 +8,19 @@ const HASHTAGS_DICAS =
 export const posts = [
   // ───────── SEMANA 1 ─────────
   {
-    slug: "01-2026-11-02-seg-reel-ja-ta-pronto",
-    kind: "reel",
-    cover: { kicker: "Reel", title: "Cliente ligando pela *5ª vez* pra saber do carro?" },
-    script: [
-      "(0–3 s) Mecânico embaixo do carro, celular tocando. Texto na tela: \"Pela 5ª vez hoje…\"",
-      "(3–7 s) Atende: \"Ainda não, senhor…\". Texto: \"Cliente ligando pra saber do carro?\"",
-      "(7–15 s) Gravação de tela: cliente digita a placa e vê o status do serviço. Texto: \"Com o BoxMonitor ele acompanha sozinho, pela placa.\"",
-      "(15–20 s) Mecânico volta ao trabalho, tranquilo. Texto: \"Menos telefone. Mais serviço.\"",
+    slug: "01-2026-11-02-seg-carrossel-ja-ta-pronto",
+    kind: "carousel",
+    slides: [
+      { type: "cover", kicker: "Atendimento", title: "Cliente ligando pela *5ª vez* pra saber do carro?", body: "Isso tem solução." },
+      { type: "item", number: "1", title: "Cada ligação *para o serviço*", body: "Larga a ferramenta, limpa a mão, atende, volta. Várias vezes por dia." },
+      { type: "item", number: "2", title: "O cliente não liga *por chatice*", body: "Ele liga porque não sabe o que está acontecendo com o carro dele." },
+      { type: "item", number: "3", title: "Informação *antes da pergunta*", body: "Cliente que recebe atualização não precisa ligar." },
+      {
+        type: "list",
+        title: "Como funciona no *BoxMonitor*",
+        list: ["1. Você atualiza o status do serviço", "2. O cliente recebe aviso no WhatsApp", "3. Ele acompanha tudo pela placa"],
+      },
+      { type: "cta", title: "Menos telefone. *Mais serviço.*", body: "Cadastre sua oficina no BoxMonitor." },
     ],
     caption: `Quantas vezes por dia o telefone toca com a mesma pergunta? 📞
 
@@ -85,14 +90,15 @@ ${HASHTAGS_PRODUTO}`,
 
   // ───────── SEMANA 2 ─────────
   {
-    slug: "04-2026-11-09-seg-reel-orcamento",
-    kind: "reel",
-    cover: { kicker: "Reel", title: "“Eu *não autorizei* isso!”" },
-    script: [
-      "(0–4 s) Cliente bravo no balcão (encenado). Texto na tela: \"'Eu não autorizei isso!'\"",
-      "(4–8 s) Texto: \"Já passou por isso?\"",
-      "(8–16 s) Gravação de tela: orçamento enviado e cliente aprovando pelo celular. Texto: \"No BoxMonitor, o cliente aprova o orçamento pelo celular. Fica registrado.\"",
-      "(16–20 s) Texto: \"Aprovou, tá aprovado.\"",
+    slug: "04-2026-11-09-seg-carrossel-orcamento",
+    kind: "carousel",
+    slides: [
+      { type: "cover", kicker: "Orçamento", title: "“Eu *não autorizei* isso!”", body: "Como acabar com essa discussão." },
+      { type: "item", number: "1", title: "Aprovação *de boca* não vale nada", body: "Na hora de pagar, é a sua palavra contra a do cliente." },
+      { type: "item", number: "2", title: "Detalhe *cada item*", body: "Peça, mão de obra e valor separados. O cliente entende o que está pagando." },
+      { type: "item", number: "3", title: "Aprovação *antes* de mexer", body: "Apareceu serviço extra? Novo orçamento, nova aprovação." },
+      { type: "item", number: "4", title: "Deixe *registrado*", body: "No BoxMonitor, o cliente aprova o orçamento pelo celular e fica tudo salvo no serviço." },
+      { type: "cta", title: "Aprovou, *tá aprovado.*", body: "Cadastre sua oficina no BoxMonitor." },
     ],
     caption: `Orçamento aprovado por telefone vira dor de cabeça na hora de pagar. 💸
 
@@ -125,14 +131,15 @@ Refaz a conta com os seus números e conta aqui: tá cobrando certo?
 ${HASHTAGS_DICAS}`,
   },
   {
-    slug: "06-2026-11-13-sex-reel-aviso-whatsapp",
-    kind: "reel",
-    cover: { kicker: "Reel", title: "Seu cliente sabendo *como está o carro*, sem ligar" },
-    script: [
-      "(0–3 s) Close num celular na mesa. Texto na tela: \"Seu cliente, no trabalho…\"",
-      "(3–8 s) Notificação do WhatsApp chega, com a mensagem de status do BoxMonitor na tela.",
-      "(8–12 s) Cliente sorri e mostra o celular. Texto: \"…sabendo exatamente como está o carro dele.\"",
-      "(12–15 s) Texto: \"Atendimento de concessionária. Preço de oficina de bairro.\"",
+    slug: "06-2026-11-13-sex-carrossel-aviso-whatsapp",
+    kind: "carousel",
+    slides: [
+      { type: "cover", kicker: "Atendimento", title: "Atendimento de *concessionária*, preço de oficina de bairro", body: "" },
+      { type: "item", number: "1", title: "Cliente *informado* confia", body: "Saber o que está acontecendo tira a ansiedade de deixar o carro na oficina." },
+      { type: "item", number: "2", title: "Avise em *cada etapa*", body: "Carro recebido, orçamento enviado, serviço em andamento, carro pronto." },
+      { type: "item", number: "3", title: "No canal que ele *já usa*", body: "O cliente vive no WhatsApp. É lá que o aviso tem que chegar." },
+      { type: "item", number: "4", title: "Sem você *digitar nada*", body: "No BoxMonitor, mudou o status do serviço, o aviso sai automático." },
+      { type: "cta", title: "Cliente que confia *volta.*", body: "Cadastre sua oficina no BoxMonitor." },
     ],
     caption: `Cliente informado é cliente que confia, e cliente que confia volta. 🤝
 
@@ -145,14 +152,19 @@ ${HASHTAGS_PRODUTO}`,
 
   // ───────── SEMANA 3 ─────────
   {
-    slug: "07-2026-11-16-seg-reel-quando-voltar",
-    kind: "reel",
-    cover: { kicker: "Reel", title: "Trocou o óleo… e *nunca mais voltou*" },
-    script: [
-      "(0–4 s) Texto na tela: \"Trocou o óleo… e nunca mais voltou.\"",
-      "(4–8 s) Texto: \"Não é falta de qualidade. É falta de lembrar.\"",
-      "(8–16 s) Gravação de tela: painel do veículo do cliente mostrando a próxima manutenção por km. Texto: \"No BoxMonitor, o cliente vê no painel quando vence a próxima manutenção.\"",
-      "(16–20 s) Texto: \"Ele sabe quando voltar. E sabe pra onde.\"",
+    slug: "07-2026-11-16-seg-carrossel-quando-voltar",
+    kind: "carousel",
+    slides: [
+      { type: "cover", kicker: "Fidelização", title: "Trocou o óleo… e *nunca mais voltou*", body: "Não é falta de qualidade. É falta de lembrar." },
+      { type: "item", number: "1", title: "O cliente *esquece*", body: "Quase ninguém anota quando é a próxima troca de óleo." },
+      { type: "item", number: "2", title: "Quem lembra *primeiro* leva", body: "Ele volta pra oficina que estiver mais perto na hora em que lembrar." },
+      {
+        type: "list",
+        title: "Serviços que *voltam*",
+        list: ["Troca de óleo e filtro", "Correia dentada", "Fluido de freio", "Alinhamento e balanceamento"],
+      },
+      { type: "item", number: "km", title: "Cadastre a *periodicidade*", body: "No BoxMonitor, cada serviço do catálogo tem intervalo em km, e o cliente vê no painel quando vence a próxima." },
+      { type: "cta", title: "Ele sabe quando voltar. *E pra onde.*", body: "Cadastre sua oficina no BoxMonitor." },
     ],
     caption: `O cliente mais barato de conquistar é o que já passou pela sua oficina. 🔁
 
@@ -209,14 +221,15 @@ ${HASHTAGS_PRODUTO}`,
 
   // ───────── SEMANA 4 ─────────
   {
-    slug: "10-2026-11-23-seg-reel-adeus-caderno",
-    kind: "reel",
-    cover: { kicker: "Reel", title: "Marcando horário com a *mão suja de graxa*?" },
-    script: [
-      "(0–4 s) Caderno de agenda rabiscado, com rasuras. Texto na tela: \"Sua agenda hoje:\"",
-      "(4–8 s) Mecânico atendendo o WhatsApp no meio do serviço. Texto: \"Marcando horário com a mão suja de graxa?\"",
-      "(8–16 s) Gravação de tela: cliente abre o link de agendamento da oficina e escolhe o horário. Texto: \"Com o BoxMonitor, o cliente agenda sozinho pelo seu link.\"",
-      "(16–20 s) Caderno fechando. Texto: \"Aposenta o caderno.\"",
+    slug: "10-2026-11-23-seg-carrossel-adeus-caderno",
+    kind: "carousel",
+    slides: [
+      { type: "cover", kicker: "Agenda", title: "Sua agenda ainda é *um caderno*?", body: "3 problemas que custam cliente." },
+      { type: "item", number: "1", title: "Rasura e *encaixe errado*", body: "Dois carros no mesmo horário e cliente esperando no balcão." },
+      { type: "item", number: "2", title: "Horário marcado *no meio do serviço*", body: "Mão suja de graxa respondendo WhatsApp." },
+      { type: "item", number: "3", title: "Cliente *sem resposta*", body: "Mandou mensagem às 21h, ninguém respondeu, marcou em outra oficina." },
+      { type: "item", number: "✓", title: "Link de *agendamento*", body: "No BoxMonitor, sua oficina tem um link: o cliente escolhe o horário sozinho, a qualquer hora." },
+      { type: "cta", title: "Aposenta *o caderno.*", body: "Cadastre sua oficina no BoxMonitor." },
     ],
     caption: `Cada mensagem pra marcar horário é uma pausa no serviço. 📅
 
