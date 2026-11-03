@@ -1,4 +1,4 @@
 node_modules/
 gerador/.build/
 video/out/
-video/public/
+video/build/

@@ -229,6 +229,6 @@ for (const post of posts) {
   console.log(`ok  ${post.slug}`);
 }
 
-writeFileSync(join(ROOT, "CRONOGRAMA.txt"), `CRONOGRAMA INSTAGRAM BOXMONITOR (novembro/2026)\n\n${schedule.join("\n")}\n`);
+writeFileSync(join(ROOT, "CRONOGRAMA.txt"), `CRONOGRAMA INSTAGRAM BOXMONITOR (novembro e dezembro/2026)\n\n${schedule.join("\n")}\n`);
 // Lida pelo publicar.mjs (GitHub Actions).
 writeFileSync(join(ROOT, "agenda.json"), `${JSON.stringify(agenda, null, 2)}\n`);

@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Já perdeu uma tarde esperando peça  | Tela: Perdeu 1 tarde esperando peça?
+que você jurava que tinha?  | Tela: Jurava que tinha
+Carro no elevador há duas horas, cliente esperando,  | Tela: Carro parado no elevador
+e o filtro acabou.  | Tela: O filtro acabou
+Ninguém anotou que pegou o último.  | Tela: Ninguém anotou
+No BoxMonitor, você define o mínimo de cada peça.  | Tela: Define o mínimo
+Chegou no mínimo, ela aparece destacada no estoque.  | Tela: Estoque baixo em destaque
+Você vê antes de faltar, não depois.  | Tela: Vê antes de faltar
+E compra com calma.  | Tela: Compra com calma
+Salva esse e não perde mais uma tarde.  | Tela: Salva esse

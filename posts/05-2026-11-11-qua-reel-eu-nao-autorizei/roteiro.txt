@@ -1,0 +1,13 @@
+ROTEIRO DO REEL
+
+Uma frase te faz perder o serviço.  | Tela: 1 frase te faz perder
+“Eu não autorizei isso.”  | Tela: “Eu não autorizei”
+Você já trocou a peça de oitocentos reais.  | Tela: Peça de R$ 800 trocada
+E o orçamento foi aprovado numa ligação de um minuto.  | Tela: Aprovado por telefone
+Na hora de cobrar,  | Tela: Na hora de cobrar
+é a sua palavra contra a dele.  | Tela: Sua palavra contra a dele
+No BoxMonitor, o orçamento vai pro celular do cliente  | Tela: Orçamento no celular dele
+com o valor e a foto do problema.  | Tela: Valor + foto
+Quem aprova é ele, pelo celular.  | Tela: Quem aprova é ele
+E fica registrado, entendeu?  | Tela: Fica registrado
+Salva esse antes de perder o próximo serviço.  | Tela: Salva antes do próximo

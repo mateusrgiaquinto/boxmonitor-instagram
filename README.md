@@ -7,7 +7,17 @@ Artes, legendas e publicação automática do Instagram do BoxMonitor.
 - `publicar.mjs`: publica o próximo post vencido da `agenda.json` (1 por execução) e registra em `publicados.json`.
 - `.github/workflows/publicar.yml`: roda o `publicar.mjs` todo dia às 12:07 (Brasília).
 
-Posts com `kind: "reel"` em `conteudo.mjs` geram capa e roteiro em `posts/` e entram na agenda, mas só são publicados quando o vídeo existir em `videos/<slug>.mp4` (MP4 1080x1920, até 15 min). Sem o vídeo, o Reel fica aguardando e os outros posts seguem normalmente; se o vídeo chegar depois da data, ele sai na próxima execução. O vídeo é enviado direto para a Meta (upload resumable), sem depender do raw do GitHub. Um post pode ter horário próprio com `publishTime` (ex.: `"15:00:00-03:00"`).
+Posts com `kind: "reel"` em `conteudo.mjs` geram capa e roteiro em `posts/` e entram na agenda, mas só são publicados quando o vídeo existir em `videos/<slug>.mp4` (MP4 1080x1920, até 15 min). Sem o vídeo, o Reel fica aguardando e os outros posts seguem normalmente; se o vídeo chegar depois da data, ele sai na próxima execução. O vídeo é enviado direto para a Meta (upload resumable), sem depender do raw do GitHub. Um post pode ter horário próprio com `publishTime` (ex.: `"15:00:00-03:00"`). Reels saem às 12h de segunda e quarta; o carrossel do mesmo dia vai para as 15h.
+
+## Vídeo dos Reels (HyperFrames)
+
+`npm run video -- <slug>` (ou `npm run video -- --todos`) gera `videos/<slug>.mp4` a partir dos `beats` do Reel em `conteudo.mjs`:
+
+- voz da ElevenLabs por beat (voz fixa em `video/render.mjs`, chave em `ELEVENLABS_API_KEY`); o áudio fica em `video/voz/` e só é gerado de novo quando a fala muda;
+- card com o texto grande, legenda da fala e, quando o beat tem `tela`, a tela do BoxMonitor recriada em `video/telas.mjs` (dados fictícios, selo "demonstração");
+- efeitos sonoros de `video/sfx/` e trilha de `video/musica/trilha.mp3` (ou `video/musica/<slug>.mp3`), se existir.
+
+O script monta um projeto HyperFrames em `video/build/<slug>/` e renderiza com `npx hyperframes@0.9.8 render`. Precisa de FFmpeg no PATH (`winget install Gyan.FFmpeg`). Para ver antes de renderizar: `npm run video -- <slug> --previa` e, na pasta do projeto, `npx hyperframes@0.9.8 preview`. Ajustes feitos no preview se perdem na próxima geração; o que deve ficar vai para `conteudo.mjs` ou `video/telas.mjs`.
 
 ## Mudar textos ou datas
 

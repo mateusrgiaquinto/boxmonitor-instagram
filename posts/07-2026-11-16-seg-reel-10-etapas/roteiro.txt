@@ -1,0 +1,13 @@
+ROTEIRO DO REEL
+
+Dez etapas que o cliente acompanha  | Tela: 10 etapas
+sem te ligar.  | Tela: Zero ligação
+Veículo recebido. Em diagnóstico.  | Tela: Recebido. Diagnóstico.
+Aguardando aprovação. Aprovado ou recusado.  | Tela: Aprovação. Aprovado ou recusado.
+Aguardando peças. Em serviço.  | Tela: Peças. Em serviço.
+Em teste final. Pronto para retirada.  | Tela: Teste final. Pronto.
+Entregue.  | Tela: Entregue.
+Mudou uma das dez etapas no BoxMonitor,  | Tela: Mudou a etapa
+o cliente recebe o aviso no celular.  | Tela: 1 botão = 1 aviso
+Você aperta um botão. Ele não precisa ligar, sabe?  | Tela: Ele não precisa ligar
+Manda pra oficina que o cliente não para de ligar.  | Tela: Manda pra oficina

@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Olha eu abrindo uma ordem de serviço  | Tela: OS sem digitar preço
+sem digitar um preço.  | Tela: Sem digitar 1 preço
+Coloco o carro.  | Tela: Coloco o carro
+Escolho três: troca de óleo, filtro, pastilha.  | Tela: Escolho 3
+O preço já vem, porque tá cadastrado.  | Tela: O preço já vem
+Pronto. Em segundos.  | Tela: Em segundos
+Você cadastra cada serviço uma vez no BoxMonitor,  | Tela: Cadastra 1 vez
+com preço e de quanto em quanto tempo troca.  | Tela: Preço e periodicidade
+Depois é só clicar, entendeu?  | Tela: Depois é só clicar
+Comenta aí: quanto tempo leva pra abrir uma ordem?  | Tela: Quanto tempo você leva?
