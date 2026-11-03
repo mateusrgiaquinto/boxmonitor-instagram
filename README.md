@@ -13,9 +13,9 @@ Posts com `kind: "reel"` em `conteudo.mjs` geram capa e roteiro em `posts/` e en
 
 `npm run video -- <slug>` (ou `npm run video -- --todos`) gera `videos/<slug>.mp4` a partir dos `beats` do Reel em `conteudo.mjs`:
 
-- voz da ElevenLabs por beat (voz fixa em `video/render.mjs`, chave em `ELEVENLABS_API_KEY`); o áudio fica em `video/voz/` e só é gerado de novo quando a fala muda;
-- card com o texto grande, legenda da fala e, quando o beat tem `tela`, a tela do BoxMonitor recriada em `video/telas.mjs` (dados fictícios, selo "demonstração");
-- efeitos sonoros de `video/sfx/` e trilha de `video/musica/trilha.mp3` (ou `video/musica/<slug>.mp3`), se existir.
+- narração da ElevenLabs do Reel inteiro numa chamada só, para a voz fluir entre as frases (voz fixa em `video/render.mjs`, chave em `ELEVENLABS_API_KEY`); fica em `video/voz/<slug>/` e só é gerada de novo quando a fala muda;
+- cards entrando palavra por palavra, legenda que acende a palavra dita e, quando o beat tem `tela`, a tela do BoxMonitor recriada em `video/telas.mjs` (dados fictícios, selo "demonstração"), com o dedo tocando nos botões e os números contando;
+- trilha instrumental da Eleven Music, uma por Reel, em `video/musica/<slug>.mp3` (a chave precisa da permissão "Music Generation"), e efeitos sonoros de `video/sfx/`.
 
 O script monta um projeto HyperFrames em `video/build/<slug>/` e renderiza com `npx hyperframes@0.9.8 render`. Precisa de FFmpeg no PATH (`winget install Gyan.FFmpeg`). Para ver antes de renderizar: `npm run video -- <slug> --previa` e, na pasta do projeto, `npx hyperframes@0.9.8 preview`. Ajustes feitos no preview se perdem na próxima geração; o que deve ficar vai para `conteudo.mjs` ou `video/telas.mjs`.
 

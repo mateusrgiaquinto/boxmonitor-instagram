@@ -1,6 +1,9 @@
 // Telas do BoxMonitor recriadas em HTML para os Reels (dados fictícios, com selo "demonstração").
 // Um beat de Reel pode ter `tela: { tipo, ...props }` ou uma lista delas (a tela muda durante a fala).
 // Textos e rótulos seguem o app (types/workshop.ts, rastreio, estoque); placa, cliente e oficina são inventados.
+//
+// Cada tela devolve { html, escura?, alvo? }: `alvo` é o seletor onde o dedo toca quando a tela aparece.
+// Números com data-contar="valor" (e data-de, data-fmt, data-sufixo) são animados contando até o valor.
 
 const DEMO = { placa: "BRA2E19", carro: "VW Gol 1.6 2015", cliente: "João", oficina: "Auto Center Demo", data: "11/11" };
 
@@ -19,6 +22,8 @@ const ETAPAS = [
 ];
 
 const brl = (value) => `R$ ${value.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+const contar = (valor, { de = 0, fmt = "brl", sufixo = "" } = {}) =>
+  `data-contar="${valor}" data-de="${de}" data-fmt="${fmt}" data-sufixo="${sufixo}"`;
 
 // Pastilha de freio gasta: chapa de aço com o material de atrito quase no fim (2 mm) e o contorno da nova.
 const pastilha = (comMedida) => `
@@ -28,10 +33,12 @@ const pastilha = (comMedida) => `
   <path d="M70 52 h380 l10 78 h-400z" fill="none" stroke="#ffc72c" stroke-width="4" stroke-dasharray="14 10"/>
   <path d="M62 116 h396 l2 14 h-400z" fill="#6b4a2b"/>
   ${comMedida ? `
-  <line x1="500" y1="116" x2="500" y2="130" stroke="#ffc72c" stroke-width="4"/>
-  <line x1="488" y1="116" x2="512" y2="116" stroke="#ffc72c" stroke-width="4"/>
-  <line x1="488" y1="130" x2="512" y2="130" stroke="#ffc72c" stroke-width="4"/>
-  <text x="566" y="104" text-anchor="end" font-family="Barlow Condensed" font-weight="800" font-size="44" fill="#ffc72c">2 mm</text>` : ""}
+  <g class="medida">
+    <line x1="500" y1="116" x2="500" y2="130" stroke="#ffc72c" stroke-width="4"/>
+    <line x1="488" y1="116" x2="512" y2="116" stroke="#ffc72c" stroke-width="4"/>
+    <line x1="488" y1="130" x2="512" y2="130" stroke="#ffc72c" stroke-width="4"/>
+    <text x="566" y="104" text-anchor="end" font-family="Barlow Condensed" font-weight="800" font-size="44" fill="#ffc72c">2 mm</text>
+  </g>` : ""}
 </svg>`;
 
 const topo = (titulo, subtitulo, extra = "") => `
@@ -42,16 +49,18 @@ const topo = (titulo, subtitulo, extra = "") => `
 const ORCAMENTO_PADRAO = [["Pastilhas dianteiras", 260], ["Mão de obra", 120]];
 
 const telas = {
-  // Câmera do celular enquadrando a pastilha.
+  // Câmera do celular enquadrando a pastilha; o dedo toca no obturador e a tela pisca.
   foto: ({ medida = false }) => ({
     escura: true,
+    alvo: medida ? undefined : ".t-obturador",
     html: `
 <div class="t-camera">
   <span class="canto c1"></span><span class="canto c2"></span><span class="canto c3"></span><span class="canto c4"></span>
   ${pastilha(medida)}
   <p class="t-legenda-foto">pastilha dianteira</p>
 </div>
-<div class="t-obturador"><span></span></div>`,
+<div class="t-obturador"><span></span></div>
+<div class="t-flash"></div>`,
   }),
 
   // Página de rastreio do cliente, com as 10 etapas do serviço.
@@ -66,12 +75,15 @@ const telas = {
       else if (index < primeira) estado = key === "quote_declined" ? "pulado" : "feito";
       return `<li class="${estado}"><span class="bolinha"></span>${label}</li>`;
     }).join("");
-    const badge = contador ? `<span class="t-contador">${ultima + 1}/10</span>` : "";
+    const badge = contador
+      ? `<span class="t-contador" ${contar(ultima + 1, { de: Math.max(primeira, 0), fmt: "int", sufixo: "/10" })}>${ultima + 1}/10</span>`
+      : "";
     return { html: `${topo("Acompanhe seu veículo", `${DEMO.placa} · ${DEMO.carro}`, badge)}<ol class="t-etapas">${linhas}</ol>` };
   },
 
   // Lado da oficina: nova atualização em "Em diagnóstico", com ou sem a foto anexada.
   diagnostico: ({ foto = false }) => ({
+    alvo: foto ? ".t-salvar" : ".t-anexar",
     html: `
 ${topo(`Nova atualização · ${DEMO.placa}`, `${DEMO.carro} · ${DEMO.cliente}`)}
 <p class="t-rotulo">Etapa</p>
@@ -80,7 +92,7 @@ ${topo(`Nova atualização · ${DEMO.placa}`, `${DEMO.carro} · ${DEMO.cliente}`
 ${foto
   ? `<div class="t-anexo"><div class="t-miniatura">${pastilha(false)}</div><div><p class="t-forte">pastilha-dianteira.jpg</p><p class="t-ok">✓ Foto anexada</p></div></div>`
   : `<div class="t-anexar">+ Anexar foto</div>`}
-<div class="t-botao">Salvar atualização</div>`,
+<div class="t-botao t-salvar">Salvar atualização</div>`,
   }),
 
   // Rastreio do cliente: fotos do diagnóstico e o orçamento para aprovar.
@@ -88,16 +100,17 @@ ${foto
   orcamento: ({ foto = true, itens = ORCAMENTO_PADRAO, passo = "aguardando" }) => {
     const total = itens.reduce((sum, [, valor]) => sum + valor, 0);
     const lista = `<ul class="t-itens">${itens.map(([nome, valor]) => `<li><span>${nome}</span><b>${brl(valor)}</b></li>`).join("")}
-<li class="total"><span>Total</span><b>${brl(total)}</b></li></ul>`;
+<li class="total"><span>Total</span><b ${passo === "aguardando" ? contar(total) : ""}>${brl(total)}</b></li></ul>`;
     const fotos = foto ? `<div class="t-foto">${pastilha(true)}<p>Fotos do diagnóstico</p></div>` : "";
     if (passo === "confirmar") {
       return {
+        alvo: ".t-confirmar .aprovar",
         html: `
 ${topo(`Orçamento · ${DEMO.placa}`, DEMO.carro)}
 <div class="t-confirmar">
   <p class="t-forte">Aprovar o orçamento de ${brl(total)}?</p>
   <p>A oficina vai começar o serviço.</p>
-  <div class="t-botao aprovar">Confirmar aprovação<span class="t-toque"></span></div>
+  <div class="t-botao aprovar">Confirmar aprovação</div>
   <div class="t-botao contorno">Voltar</div>
 </div>`,
       };
@@ -107,8 +120,11 @@ ${topo(`Orçamento · ${DEMO.placa}`, DEMO.carro)}
       : `<span class="t-chip">Aguardando sua aprovação</span>`;
     const rodape = passo === "aprovado"
       ? `<div class="t-aprovado">✓ Orçamento aprovado</div>`
-      : `<div class="t-botoes"><div class="t-botao contorno">Recusar</div><div class="t-botao aprovar">Aprovar orçamento${passo === "toque" ? `<span class="t-toque"></span>` : ""}</div></div>`;
-    return { html: `${topo(`Orçamento · ${DEMO.placa}`, DEMO.carro)}${chip}${fotos}${lista}${rodape}` };
+      : `<div class="t-botoes"><div class="t-botao contorno">Recusar</div><div class="t-botao aprovar">Aprovar orçamento</div></div>`;
+    return {
+      alvo: passo === "toque" ? ".t-botoes .aprovar" : undefined,
+      html: `${topo(`Orçamento · ${DEMO.placa}`, DEMO.carro)}${chip}${fotos}${lista}${rodape}`,
+    };
   },
 
   // Lado da oficina: a resposta do cliente fica registrada no serviço.
@@ -141,6 +157,7 @@ ${topo(`Serviço · ${DEMO.placa}`, `${DEMO.carro} · ${DEMO.cliente}`)}
 
   // Catálogo de serviços da oficina, com a periodicidade e o aviso antes de vencer.
   catalogo: ({ destaque = "" }) => ({
+    alvo: destaque ? ".marcado" : undefined,
     html: `
 ${topo("Catálogo de serviços", DEMO.oficina)}
 <ul class="t-catalogo">
@@ -152,24 +169,27 @@ ${topo("Catálogo de serviços", DEMO.oficina)}
 </ul>`,
   }),
 
-  // Nova ordem de serviço: os serviços do catálogo já trazem o preço.
+  // Nova ordem de serviço: o serviço escolhido no catálogo já traz o preço.
   os: ({ itens = 0 }) => {
     const servicos = [["Troca de óleo", 140], ["Filtro de óleo", 40], ["Pastilhas dianteiras", 260]].slice(0, itens);
     const total = servicos.reduce((sum, [, valor]) => sum + valor, 0);
+    const anterior = servicos.slice(0, -1).reduce((sum, [, valor]) => sum + valor, 0);
     return {
+      alvo: itens ? "li.novo" : ".t-select",
       html: `
 ${topo("Nova ordem de serviço", DEMO.oficina)}
 <p class="t-rotulo">Veículo</p>
 <div class="t-select">${DEMO.placa} · ${DEMO.carro}</div>
 <p class="t-rotulo">Serviço do catálogo</p>
-<ul class="t-itens">${servicos.map(([nome, valor]) => `<li><span>✓ ${nome}</span><b>${brl(valor)}</b></li>`).join("")}
+<ul class="t-itens">${servicos.map(([nome, valor], index) => `<li class="${index === itens - 1 ? "novo" : ""}"><span>✓ ${nome}</span><b>${brl(valor)}</b></li>`).join("")}
 ${servicos.length < 3 ? `<li class="vazio"><span>+ Adicionar serviço</span></li>` : ""}
-<li class="total"><span>Total</span><b>${brl(total)}</b></li></ul>`,
+<li class="total"><span>Total</span><b ${contar(total, { de: anterior })}>${brl(total)}</b></li></ul>`,
     };
   },
 
   // Histórico do veículo: cada passagem com data, km, o que foi feito e a nota fiscal.
   historico: ({ aberto = false }) => ({
+    alvo: aberto ? "li.aberto" : undefined,
     html: `
 ${topo(`Histórico · ${DEMO.placa}`, DEMO.carro)}
 <ul class="t-historico">
@@ -191,15 +211,16 @@ ${topo(`Histórico · ${DEMO.placa}`, DEMO.carro)}
     const linhas = pecas.map(([nome, qtd, minimo], index) => {
       const baixo = alerta && qtd <= minimo;
       const marcado = editando && index === 1;
+      const quantidade = baixo ? `<b ${contar(qtd, { de: 5, fmt: "int", sufixo: " un" })}>${qtd} un</b>` : `<b>${qtd} un</b>`;
       return `<li class="${baixo ? "baixo" : ""}"><div><p class="t-forte">${nome}</p><p class="t-periodo ${marcado ? "marcado" : ""}">Estoque mínimo: ${minimo}</p></div>
-<div class="t-qtd"><b>${qtd} un</b>${baixo ? `<span class="t-chip vermelho">Estoque baixo</span>` : ""}</div></li>`;
+<div class="t-qtd">${quantidade}${baixo ? `<span class="t-chip vermelho">Estoque baixo</span>` : ""}</div></li>`;
     }).join("");
-    return { html: `${topo("Estoque", DEMO.oficina)}<ul class="t-estoque">${linhas}</ul>` };
+    return { alvo: editando ? ".marcado" : undefined, html: `${topo("Estoque", DEMO.oficina)}<ul class="t-estoque">${linhas}</ul>` };
   },
 
   // Lista curta de recursos, para fechar um Reel com vários itens.
   lista: ({ itens }) => ({
-    html: `<ul class="t-lista">${itens.map((item) => `<li><span>✓</span>${item}</li>`).join("")}</ul>`,
+    html: `${topo("No BoxMonitor", DEMO.oficina)}<ul class="t-lista">${itens.map((item) => `<li><span>✓</span>${item}</li>`).join("")}</ul>`,
   }),
 };
 
@@ -209,17 +230,20 @@ export const renderTela = (tela) => {
   return montar(tela);
 };
 
-// Um toque na tela (dedo em um botão) pede o som de clique; o resto muda com um "pop".
-export const temToque = (tela) => tela.tipo === "orcamento" && (tela.passo === "toque" || tela.passo === "confirmar");
-
 export const TELA_CSS = `
-.painel { position:absolute; left:130px; top:520px; width:680px; height:640px; border-radius:36px; overflow:hidden;
+.palco { position:absolute; left:130px; top:520px; width:680px; height:640px; opacity:0; }
+.flutua { position:absolute; inset:0; }
+.painel { position:absolute; inset:0; border-radius:36px; overflow:hidden;
   background:#eceff1; color:#1a1d21; box-shadow:0 30px 80px rgba(0,10,40,.45); font-family:"Barlow"; }
 .selo { position:absolute; right:22px; bottom:14px; z-index:5; font-family:"Barlow Condensed"; font-weight:700; font-size:24px;
   letter-spacing:3px; text-transform:uppercase; color:#4a5568; background:rgba(255,255,255,.9); padding:4px 12px; border-radius:6px; }
-.estado { position:absolute; inset:0; padding:30px 38px 62px; display:flex; flex-direction:column; gap:14px; background:#eceff1; }
+.estado { position:absolute; inset:0; padding:30px 38px 62px; display:flex; flex-direction:column; gap:14px; background:#eceff1; opacity:0; }
 /* Telas de celular (câmera, tela de bloqueio): fundo escuro. Cada estado tem fundo próprio para cobrir o anterior. */
 .estado.escura { background:linear-gradient(160deg,#1d2a4a,#0b1226); color:#fff; }
+.dedo { position:absolute; left:0; top:0; width:84px; height:84px; margin:-42px 0 0 -42px; border-radius:50%; z-index:10; opacity:0;
+  background:rgba(255,255,255,.92); border:5px solid #ffc72c; box-shadow:0 10px 30px rgba(0,0,0,.35); }
+.onda { position:absolute; left:0; top:0; width:84px; height:84px; margin:-42px 0 0 -42px; border-radius:50%; z-index:9; opacity:0;
+  border:6px solid #ffc72c; }
 .t-topo { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
 .t-sub { font-size:26px; font-weight:600; color:#4a5568; }
 .t-titulo { font-family:"Barlow Condensed"; font-weight:800; font-size:46px; text-transform:uppercase; line-height:1; color:#003399; }
@@ -240,11 +264,10 @@ export const TELA_CSS = `
 .t-miniatura .pastilha { width:100%; height:100%; }
 .t-forte { font-size:28px; font-weight:700; }
 .t-ok { font-size:24px; font-weight:700; color:#1e6b2c; }
-.t-botao { position:relative; overflow:hidden; background:#003399; color:#fff; text-align:center; font-family:"Barlow Condensed"; font-weight:800;
+.t-botao { position:relative; background:#003399; color:#fff; text-align:center; font-family:"Barlow Condensed"; font-weight:800;
   font-size:34px; text-transform:uppercase; padding:16px; border-radius:14px; }
 .t-botao.contorno { background:#fff; color:#003399; border:3px solid #003399; }
 .t-botoes { display:grid; grid-template-columns:1fr 1.7fr; gap:14px; margin-top:auto; }
-.t-toque { position:absolute; left:50%; top:50%; width:90px; height:90px; margin:-45px 0 0 -45px; border-radius:50%; background:rgba(255,199,44,.75); }
 .t-chip { align-self:flex-start; font-size:24px; font-weight:700; padding:6px 14px; border-radius:999px; background:#fff3cd; color:#6b4f00; }
 .t-chip.verde { background:#d8f0dc; color:#1e6b2c; }
 .t-chip.vermelho { background:#fde2e1; color:#a8201a; }
@@ -255,6 +278,7 @@ export const TELA_CSS = `
 .t-itens li { display:flex; justify-content:space-between; font-size:28px; font-weight:600; background:#fff; padding:7px 16px; border-radius:10px; }
 .t-itens li.total { background:none; font-size:32px; font-weight:800; border-top:2px solid #cfd6dd; border-radius:0; }
 .t-itens li.vazio { background:none; border:2px dashed #9aa4ae; color:#4a5568; }
+.t-itens li.novo { box-shadow:inset 0 0 0 3px #ffc72c; }
 .t-aprovado { margin-top:auto; background:#1e6b2c; color:#fff; font-size:30px; font-weight:700; padding:18px; border-radius:14px; text-align:center; }
 .t-confirmar { margin:auto 0; background:#fff; border-radius:20px; padding:30px; display:flex; flex-direction:column; gap:16px; font-size:26px; box-shadow:0 10px 30px rgba(0,0,0,.12); }
 .t-registro { background:#fff; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:10px; }
@@ -288,4 +312,5 @@ export const TELA_CSS = `
 .c3 { left:0; bottom:0; border-right:0; border-top:0; } .c4 { right:0; bottom:0; border-left:0; border-top:0; }
 .t-obturador { align-self:center; width:90px; height:90px; border-radius:50%; border:6px solid #fff; display:flex; align-items:center; justify-content:center; flex:none; }
 .t-obturador span { width:66px; height:66px; border-radius:50%; background:#fff; }
+.t-flash { position:absolute; inset:0; background:#fff; opacity:0; }
 `;
