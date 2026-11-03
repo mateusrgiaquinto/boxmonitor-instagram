@@ -94,6 +94,37 @@ Qual desses sinais acontece mais na sua oficina? Comenta o número 👇
 ${HASHTAGS_DICAS}`,
   },
   {
+    slug: "02-2026-11-05-qui-reel-cliente-de-70-anos",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Cliente de *70 anos* usa celular" },
+    beats: [
+      { say: "[knowingly] Seu cliente de 70 anos usa celular.", card: "Cliente de *70 anos*" },
+      { say: "[seriously] E você perde ele mesmo assim.", card: "E você *perde ele*" },
+      { say: "[chuckles] Ele manda áudio de 3 minutos, cara.", card: "Áudio de *3 minutos*" },
+      { say: "O que ele não usa é app pra baixar.", card: "App pra baixar? *Não.*" },
+      { say: "[confident] No BoxMonitor, ele não baixa nada.", card: "Não baixa *nada*", tela: { tipo: "placa" } },
+      { say: "Digita a placa do carro", card: "Digita *a placa*", tela: { tipo: "placa", digitado: true } },
+      { say: "e vê a etapa do serviço.", card: "Vê *a etapa*", tela: { tipo: "etapas", etapa: "received" } },
+      {
+        say: "Recebido, diagnóstico, serviço, pronto.",
+        card: "Do recebido *ao pronto*",
+        tela: [{ tipo: "etapas", etapa: "diagnosis" }, { tipo: "etapas", etapa: "in_service" }, { tipo: "etapas", etapa: "ready" }],
+      },
+      { say: "[warmly] Sem te ligar. Sem chamar o neto, sabe?", card: "Sem chamar *o neto*" },
+      { say: "[playfully] Manda pro mecânico que acha", card: "Manda pro *mecânico*" },
+      { say: "que cliente de 70 anos não usa celular.", card: "70 anos *usa celular*" },
+    ],
+    caption: `Seu cliente de 70 anos usa celular, sim. Manda pro mecânico que acha que não.
+
+Ele manda áudio de 3 minutos no WhatsApp. O que ele não usa é app complicado pra baixar.
+
+No BoxMonitor o cliente entra no site, digita a placa do carro e vê em que etapa está o serviço. Sem baixar nada, sem te ligar.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
     slug: "03-2026-11-06-sex-post-fixo-o-que-e",
     kind: "single",
     pin: true,
@@ -248,6 +279,40 @@ Refaz a conta com os seus números e conta aqui: tá cobrando certo?
 ${HASHTAGS_DICAS}`,
   },
   {
+    slug: "05-2026-11-12-qui-reel-cliente-chato",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Cliente que liga 5 vezes *não é chato*" },
+    beats: [
+      { say: "[exasperated] Para de chamar de chato", card: "Ele *não é chato*" },
+      { say: "o cliente que liga 5 vezes.", card: "Ligou *5 vezes*" },
+      { say: "[calmly] Ele não é chato, cara. Ele tá no escuro.", card: "Ele tá *no escuro*" },
+      { say: "[sighs] Deixou o carro às 8 e ninguém falou nada.", card: "Às 8h. *Nenhuma notícia.*" },
+      { say: "[empathetic] Imagina você, 6 horas sem notícia do seu carro.", card: "*6 horas* sem notícia" },
+      { say: "[confident] No BoxMonitor, cada etapa que você muda", card: "Cada etapa *que você muda*", tela: { tipo: "atualizar", etapa: "Em diagnóstico" } },
+      {
+        say: "vira aviso no celular dele.",
+        card: "Vira *aviso no celular*",
+        tela: { tipo: "notificacao", titulo: "Em diagnóstico", texto: "BRA2E19 · Auto Center Demo" },
+      },
+      {
+        say: "Diagnóstico. Orçamento. Pronto pra retirar.",
+        card: "Cada passo, *um aviso*",
+        tela: [{ tipo: "etapas", etapa: "diagnosis" }, { tipo: "etapas", etapa: "awaiting_approval" }, { tipo: "etapas", etapa: "ready" }],
+      },
+      { say: "[relieved] E o telefone para de tocar, sabe?", card: "O telefone *para*" },
+      { say: "[playfully] Manda pro mecânico que ainda chama cliente de chato.", card: "Manda pro *mecânico*" },
+    ],
+    caption: `Cliente que liga 5 vezes não é chato. Ele tá no escuro. Manda pro mecânico que ainda chama cliente de chato.
+
+Deixou o carro às 8 e ninguém deu notícia. Qualquer um ia ligar.
+
+No BoxMonitor, cada etapa que você muda vira aviso no celular do cliente: diagnóstico, orçamento, pronto pra retirar. E o telefone para de tocar.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
     slug: "06-2026-11-13-sex-carrossel-aviso-whatsapp",
     kind: "carousel",
     slides: [
@@ -398,6 +463,41 @@ Marca aquele amigo mecânico que precisa ver isso.
 ${HASHTAGS_DICAS}`,
   },
   {
+    slug: "08-2026-11-19-qui-reel-dez-da-noite",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Oficina perde cliente *às 10 da noite*" },
+    beats: [
+      { say: "[mysteriously] Ninguém te conta", card: "Ninguém *te conta*" },
+      { say: "que oficina perde cliente às 10 da noite.", card: "Perde cliente *às 22h*" },
+      { say: "É quando ele lembra da revisão.", card: "Ele lembra *da revisão*" },
+      { say: "[sighs] Manda mensagem. Você tá dormindo.", card: "Você *tá dormindo*" },
+      { say: "[frustrated] Às 8 você responde. Ele já foi pra outra.", card: "Já foi *pra outra*" },
+      { say: "[confident] No BoxMonitor, sua oficina tem link de agendamento.", card: "Link de *agendamento*", tela: { tipo: "agenda", passo: "dia" } },
+      {
+        say: "Ele escolhe o dia. O horário. Confirma.",
+        card: "Dia. Horário. *Confirma.*",
+        tela: [{ tipo: "agenda", passo: "dia" }, { tipo: "agenda", passo: "horario" }, { tipo: "agenda", passo: "confirmar" }],
+      },
+      { say: "[excited] Às 10 da noite, às 2 da manhã, tanto faz.", card: "*Qualquer hora*", tela: { tipo: "agenda", passo: "agendado" } },
+      {
+        say: "Você acorda com “Novo agendamento”, entendeu?",
+        card: "Acorda *agendado*",
+        tela: { tipo: "notificacao", titulo: "Novo agendamento", texto: "Qui, 19/11 às 08:00 · BRA2E19", hora: "07:02", dia: "quarta-feira, 18/11" },
+      },
+      { say: "[playfully] Põe o link na bio", card: "Link *na bio*" },
+      { say: "e para de perder cliente às 10 da noite.", card: "Chega de perder *às 22h*" },
+    ],
+    caption: `Ninguém te conta que oficina perde cliente às 10 da noite. Põe o link de agendamento na bio e para de perder.
+
+É a hora que o cliente lembra da revisão. Manda mensagem, você tá dormindo, e de manhã ele já marcou em outra.
+
+No BoxMonitor sua oficina tem um link de agendamento: o cliente escolhe o dia, o horário e confirma. A qualquer hora. Você acorda com o aviso de novo agendamento.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
     // Substitui o Reel de oficina parceira enquanto não houver uma oficina real para gravar.
     slug: "09-2026-11-20-sex-carrossel-mito-ou-verdade",
     kind: "carousel",
@@ -528,6 +628,37 @@ Qual peça mais falta aí na sua oficina? 👇
 ${HASHTAGS_DICAS}`,
   },
   {
+    slug: "11-2026-11-26-qui-reel-um-botao",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Sem recepcionista. *1 botão.*" },
+    beats: [
+      { say: "[confidently] Você não precisa de recepcionista.", card: "Sem *recepcionista*" },
+      { say: "Precisa de 1 botão.", card: "Precisa de *1 botão*" },
+      { say: "[knowingly] Na oficina pequena você é 3 em 1, né?", card: "Você é *3 em 1*" },
+      { say: "Dono, mecânico e atendente.", card: "Dono. Mecânico. *Atendente.*" },
+      { say: "[sighs] E aí o cliente fica pra depois.", card: "Cliente *fica pra depois*" },
+      { say: "[confident] No BoxMonitor, você atualiza a etapa pelo celular,", card: "Atualiza *pelo celular*", tela: { tipo: "atualizar", etapa: "Em serviço", toque: false } },
+      { say: "do lado do carro, com a mão suja mesmo.", card: "Com *a mão suja*", tela: { tipo: "atualizar", etapa: "Pronto para retirada" } },
+      {
+        say: "Apertou 1 botão, o cliente recebe o aviso.",
+        card: "1 botão. *1 aviso.*",
+        tela: { tipo: "notificacao", titulo: "Pronto para retirada", texto: "BRA2E19 · Auto Center Demo" },
+      },
+      { say: "[relieved] Sem parar o serviço, sabe?", card: "Sem *parar o serviço*" },
+      { say: "[playfully] Manda pro mecânico que faz tudo sozinho.", card: "Manda pro *mecânico*" },
+      { say: "Ele só precisa de 1 botão.", card: "Só precisa de *1 botão*" },
+    ],
+    caption: `Você não precisa de recepcionista pra avisar o cliente. Precisa de 1 botão. Manda pro mecânico que faz tudo sozinho.
+
+Na oficina pequena você é dono, mecânico e atendente. E o cliente acaba ficando pra depois.
+
+No BoxMonitor você atualiza a etapa pelo celular, do lado do carro. Apertou, o cliente recebe o aviso. Sem parar o serviço.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
     slug: "12-2026-11-27-sex-carrossel-3-passos",
     kind: "carousel",
     slides: [
@@ -597,6 +728,37 @@ ${HASHTAGS_REEL}`,
     caption: `Carro no elevador, cliente esperando e o filtro que você jurava que tinha acabou. Salva esse e não perde mais uma tarde.
 
 No BoxMonitor você define o estoque mínimo de cada peça. Chegou no mínimo, ela aparece com o selo "Estoque baixo". Você vê antes de faltar e compra com calma.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
+    slug: "14-2026-12-03-qui-reel-concessionaria",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "A concessionária *lembra*. Você não." },
+    beats: [
+      { say: "[seriously] A concessionária lembra dos 6 meses do seu cliente.", card: "A concessionária *lembra*" },
+      { say: "[pointedly] Você não.", card: "*Você não.*" },
+      { say: "[warmly] Ela não é melhor que você, cara.", card: "Não é *melhor que você*" },
+      { say: "Ela só lembra a data.", card: "Só lembra *a data*" },
+      { say: "[confident] No BoxMonitor, seu cliente tem o painel do carro.", card: "Painel *do carro*", tela: { tipo: "painel" } },
+      { say: "Vê a próxima troca: 18 de dezembro.", card: "Próxima troca: *18/12*", tela: { tipo: "painel", destaque: true } },
+      {
+        say: "E 15 dias antes, recebe o lembrete da sua oficina.",
+        card: "*15 dias* antes",
+        tela: { tipo: "notificacao", titulo: "Troca de óleo e filtro vence em 18 de dezembro", texto: "BRA2E19 · Auto Center Demo", hora: "09:00", dia: "quinta-feira, 03/12" },
+      },
+      { say: "[proudly] Não da concessionária. Da sua.", card: "Da *sua* oficina" },
+      { say: "[warmly] E daqui 6 meses ele volta pra quem lembrou, sabe?", card: "Volta pra *quem lembrou*" },
+      { say: "[playfully] Salva esse", card: "*Salva* esse" },
+      { say: "e lembra do seu cliente antes da concessionária.", card: "Lembra *antes dela*" },
+    ],
+    caption: `A concessionária lembra dos 6 meses do seu cliente. Você não. Salva esse e lembra antes dela.
+
+Ela não é melhor que você. Ela só lembra a data.
+
+No BoxMonitor o cliente tem o painel do carro com a próxima troca, e recebe o lembrete da sua oficina antes de vencer. Não da concessionária. Da sua.
 
 👉 Cadastre sua oficina pelo link da bio.
 

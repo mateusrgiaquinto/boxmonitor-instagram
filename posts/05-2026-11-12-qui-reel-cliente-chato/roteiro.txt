@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Para de chamar de chato  | Tela: Ele não é chato
+o cliente que liga 5 vezes.  | Tela: Ligou 5 vezes
+Ele não é chato, cara. Ele tá no escuro.  | Tela: Ele tá no escuro
+Deixou o carro às 8 e ninguém falou nada.  | Tela: Às 8h. Nenhuma notícia.
+Imagina você, 6 horas sem notícia do seu carro.  | Tela: 6 horas sem notícia
+No BoxMonitor, cada etapa que você muda  | Tela: Cada etapa que você muda
+vira aviso no celular dele.  | Tela: Vira aviso no celular
+Diagnóstico. Orçamento. Pronto pra retirar.  | Tela: Cada passo, um aviso
+E o telefone para de tocar, sabe?  | Tela: O telefone para
+Manda pro mecânico que ainda chama cliente de chato.  | Tela: Manda pro mecânico

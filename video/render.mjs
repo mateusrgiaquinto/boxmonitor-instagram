@@ -108,10 +108,11 @@ const compose = async (post, index, seconds) => {
   mkdirSync(dir, { recursive: true });
   const file = join(dir, `${post.slug}.mp3`);
   const metaPath = join(dir, `${post.slug}.json`);
-  const prompt = MUSIC_PROMPTS[index % MUSIC_PROMPTS.length];
   const lengthMs = Math.ceil((seconds + 1.5) * 1000);
   const cached = readJson(metaPath);
-  if (existsSync(file) && cached?.prompt === prompt && cached.lengthMs >= lengthMs - 1500) return file;
+  // A trilha já gerada fica enquanto cobrir o vídeo (o clima não muda quando entram Reels novos na lista).
+  if (existsSync(file) && cached && cached.lengthMs >= lengthMs - 1500) return file;
+  const prompt = cached?.prompt ?? MUSIC_PROMPTS[index % MUSIC_PROMPTS.length];
 
   const res = await fetch(`${ELEVENLABS}/music?output_format=mp3_44100_128`, {
     method: "POST",
@@ -194,26 +195,73 @@ ${script}
 </template>
 `;
 
-// Fundo: gradiente da marca, dois brilhos que andam devagar e a faixa zebrada correndo.
-const fundoScene = (total) => sceneFile(
+// Fundo que conta a história: cada reel passa por três paletas e troca de uma para a outra com uma cortina diagonal.
+//   amarelo  gancho e chamada final: chama a atenção no feed
+//   escuro   o problema: grafite de oficina, grade e faixa de alerta
+//   azul     a solução: o azul da marca
+// Atrás de tudo, um letreiro gigante "BOXMONITOR" vazado corre em faixas inclinadas.
+const paletteFor = (beats) => {
+  const solution = beats.findIndex((item) => /BoxMonitor/i.test(item.beat.say) || item.telas.length);
+  // Gancho e chamada final valem pela frase inteira, mesmo quebrada em mais de um beat.
+  const endsSentence = (item) => /[.!?”"]$/.test(item.beat.say.trim());
+  let hookEnd = 0;
+  while (hookEnd < beats.length - 1 && !endsSentence(beats[hookEnd])) hookEnd += 1;
+  let ctaStart = beats.length - 1;
+  while (ctaStart > hookEnd + 1 && !endsSentence(beats[ctaStart - 1])) ctaStart -= 1;
+  return beats.map((item, index) => {
+    if (item.beat.fundo) return item.beat.fundo;
+    if (index <= hookEnd || index >= ctaStart) return "amarelo";
+    return solution > 0 && index < solution ? "escuro" : "azul";
+  });
+};
+
+// Uma camada por troca de paleta; a de cima entra pela cortina.
+const fundoScene = (total, phases) => sceneFile(
   "fundo",
-  `#root { overflow:hidden; background:radial-gradient(circle at 85% 10%, #0a47c2 0%, #003399 45%, #001f66 100%); }
-.brilho { position:absolute; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.14), rgba(255,255,255,0) 70%); }
-#fundo-b1 { width:900px; height:900px; left:420px; top:-260px; }
-#fundo-b2 { width:700px; height:700px; left:-300px; top:1100px; background:radial-gradient(circle, rgba(255,199,44,.12), rgba(255,199,44,0) 70%); }
+  `#root { overflow:hidden; background:#001f66; }
+.camada { position:absolute; inset:0; overflow:hidden; }
+.camada.azul { background:radial-gradient(circle at 85% 10%, #0a47c2 0%, #003399 45%, #001f66 100%); }
+.camada.amarelo { background:radial-gradient(circle at 30% 20%, #ffe07a 0%, #ffc72c 45%, #f0a800 100%); }
+.camada.escuro { background:radial-gradient(circle at 70% 30%, #2a313b 0%, #161a20 60%, #0b0d10 100%); }
+.camada.escuro::before { content:""; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.05) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,.05) 2px, transparent 2px);
+  background-size:90px 90px; }
+.letreiro { position:absolute; left:-400px; top:-200px; width:1900px; transform:rotate(-12deg); display:flex; flex-direction:column; gap:30px; }
+.linha { white-space:nowrap; font-family:"Barlow Condensed"; font-weight:800; font-size:260px; line-height:1; letter-spacing:6px;
+  color:transparent; -webkit-text-stroke:3px rgba(255,255,255,.09); }
+.amarelo .linha { -webkit-text-stroke-color:rgba(0,31,102,.13); }
+.escuro .linha { -webkit-text-stroke-color:rgba(255,199,44,.1); }
+.alerta { position:absolute; right:-220px; top:1500px; width:760px; height:70px; transform:rotate(-38deg); opacity:.85;
+  background:repeating-linear-gradient(-45deg, #ffc72c 0 34px, #161a20 34px 68px); }
+.brilho { position:absolute; width:900px; height:900px; left:420px; top:-260px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.16), rgba(255,255,255,0) 70%); }
 .marca { position:absolute; top:176px; left:88px; display:flex; align-items:center; gap:16px; font-family:"Barlow Condensed";
-  font-weight:700; font-size:30px; letter-spacing:4px; }
+  font-weight:700; font-size:30px; letter-spacing:4px; color:#fff; }
+.amarelo .marca { color:#001f66; }
 .marca img { width:52px; height:52px; border-radius:10px; background:#fff; }
 .faixa { position:absolute; left:0; bottom:0; width:1400px; height:28px;
-  background:repeating-linear-gradient(-45deg, #ffc72c 0 28px, #1a1d21 28px 56px); }`,
-  `    <div id="fundo-b1" class="brilho" data-layout-ignore></div>
-    <div id="fundo-b2" class="brilho" data-layout-ignore></div>
-    <div class="marca"><img src="assets/logo.png" alt="" />BOXMONITOR</div>
-    <div id="fundo-faixa" class="faixa" data-layout-ignore></div>`,
-  `    tl.fromTo("#fundo-b1", { x: 0, y: 0, scale: 1 }, { x: -320, y: 220, scale: 1.2, duration: ${total}, ease: "sine.inOut" }, 0);
-    tl.fromTo("#fundo-b2", { x: 0, y: 0, scale: 1 }, { x: 380, y: -160, scale: 1.3, duration: ${total}, ease: "sine.inOut" }, 0);
-    // A faixa anda um período do padrão (79,2 px na horizontal) por segundo e volta ao início sem emenda visível.
-    tl.fromTo("#fundo-faixa", { x: 0 }, { x: -79.196, duration: 1, ease: "none", repeat: ${Math.ceil(total)} }, 0);`,
+  background:repeating-linear-gradient(-45deg, #ffc72c 0 28px, #1a1d21 28px 56px); }
+.amarelo .faixa { background:repeating-linear-gradient(-45deg, #001f66 0 28px, #ffc72c 28px 56px); }`,
+  phases.map((phase, n) => `    <div id="f${n + 1}" class="camada ${phase.palette}" data-layout-ignore>
+      <div class="letreiro">${Array.from({ length: 6 }, () => `<div class="linha">BOXMONITOR · BOXMONITOR · BOXMONITOR ·</div>`).join("")}</div>
+      ${phase.palette === "escuro" ? `<div class="alerta"></div>` : `<div class="brilho"></div>`}
+      <div class="marca"><img src="assets/logo.png" alt="" />BOXMONITOR</div>
+      <div class="faixa"></div>
+    </div>`).join("\n"),
+  `    const phases = ${JSON.stringify(phases)};
+    // Cortina diagonal: um paralelogramo que vem da direita e cobre a tela (mesmo número de pontos do início ao fim).
+    const cortina = (left) => "polygon(" + (left + 20) + "% 0%, 130% 0%, 130% 100%, " + left + "% 100%)";
+    phases.forEach((phase, n) => {
+      const layer = document.getElementById("f" + (n + 1));
+      if (n > 0) tl.fromTo(layer, { clipPath: cortina(110) }, { clipPath: cortina(-30), duration: 0.45, ease: "power3.inOut", immediateRender: true }, phase.start - 0.12);
+      layer.querySelectorAll(".linha").forEach((row, k) => {
+        tl.fromTo(row, { x: k % 2 ? -500 : 0 }, { x: k % 2 ? 0 : -500, duration: ${total}, ease: "none" }, 0);
+      });
+      const glow = layer.querySelector(".brilho");
+      if (glow) tl.fromTo(glow, { x: 0, y: 0, scale: 1 }, { x: -320, y: 220, scale: 1.2, duration: ${total}, ease: "sine.inOut" }, 0);
+      // A faixa anda um período do padrão (79,2 px na horizontal) por segundo e volta ao início sem emenda visível.
+      tl.fromTo(layer.querySelector(".faixa"), { x: 0 }, { x: -79.196, duration: 1, ease: "none", repeat: ${Math.ceil(total)} }, 0);
+    });`,
 );
 
 // Card: palavras soltas que entram uma a uma; o trecho *destacado* sai em amarelo e ganha um traço por baixo.
@@ -233,8 +281,12 @@ const cardsScene = (plan) => sceneFile(
 #c01 { opacity:1; }
 .w { display:inline-block; position:relative; }
 .hl { color:#ffc72c; }
-.risco { position:absolute; left:0; right:0; bottom:-2px; height:10px; border-radius:5px; background:#ffc72c; transform-origin:left center; }`,
-  plan.map((card) => `    <h1 id="${card.id}" class="card ${card.comTela ? "com-tela" : "sozinho"}">${cardWords(card.text)}</h1>`).join("\n"),
+.risco { position:absolute; left:0; right:0; bottom:-2px; height:10px; border-radius:5px; background:#ffc72c; transform-origin:left center; }
+/* No fundo amarelo o texto fica azul-marinho e o destaque vira uma tarja marinho com letra amarela. */
+.card.amarelo { color:#001f66; }
+.card.amarelo .hl { color:#ffc72c; background:#001f66; padding:0 .12em; border-radius:8px; }
+.card.amarelo .risco { display:none; }`,
+  plan.map((card) => `    <h1 id="${card.id}" class="card ${card.comTela ? "com-tela" : "sozinho"} ${card.palette}">${cardWords(card.text)}</h1>`).join("\n"),
   `    const plan = ${JSON.stringify(plan)};
     plan.forEach((card, index) => {
       const el = document.getElementById(card.id);
@@ -329,9 +381,12 @@ ${layers.map((layer) => `          <div id="${layer.id}" class="estado${layer.es
       }
 
       // Realce em quem mudou.
-      const accents = el.querySelectorAll(".atual, .t-chip, .t-aprovado, .baixo, .marcado, .destaque, .aberto, .t-anexo, .t-itens li.novo, .t-registro, .t-contador");
+      const accents = el.querySelectorAll(".atual, .t-chip, .t-aprovado, .baixo, .marcado, .destaque, .aberto, .t-anexo, .t-itens li.novo, .t-registro, .t-contador, .dia.sel, .slot.sel, .marcado-campo");
+      // Placa sendo digitada, letra por letra.
+      const letters = el.querySelectorAll(".ch");
+      if (letters.length) tl.fromTo(letters, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.05, stagger: 0.07, ease: "none", immediateRender: false }, at + 0.1);
       if (accents.length) tl.fromTo(accents, { scale: 0.82 }, { scale: 1, duration: 0.42, ease: "back.out(2.6)", stagger: 0.08, immediateRender: false }, layer.accentAt);
-      const items = el.querySelectorAll(".t-lista li, .t-itens li:not(.total):not(.vazio), .t-catalogo li, .t-estoque li, .t-historico li, .t-etapas li");
+      const items = el.querySelectorAll(".t-lista li, .t-itens li:not(.total):not(.vazio), .t-catalogo li, .t-estoque li, .t-historico li, .t-etapas li, .t-manut li, .dia, .slot");
       if (layer.mode !== "swap" && items.length) {
         tl.fromTo(items, { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "power2.out", stagger: layer.tipo === "lista" ? 0.35 : 0.04, immediateRender: false }, at + 0.08);
       }
@@ -388,12 +443,23 @@ const buildReel = async (post, index) => {
   const layers = [];
   const effects = [];
   const addEffect = (kind, at) => effects.push({ kind, start: sec(Math.max(0, at - SFX[kind].peak + FRAME)) });
+
+  // Paleta de cada beat e as trocas de fundo (cada troca é uma cortina com whoosh).
+  const palettes = paletteFor(beats);
+  const phases = [];
+  palettes.forEach((palette, k) => {
+    if (phases.at(-1)?.palette === palette) return;
+    phases.push({ palette, start: beats[k].start });
+    if (k > 0) addEffect("whoosh", beats[k].start + 0.08);
+  });
+  const isWipe = (beatIndex) => beatIndex > 0 && palettes[beatIndex] !== palettes[beatIndex - 1];
+
   beats.forEach((item, beatIndex) => {
     if (!item.telas.length) return;
     const previousBeat = beats[beatIndex - 1];
     if (!previousBeat?.telas.length) {
       segments.push({ start: item.start, end: item.end, isLast: false });
-      if (item.start > 0) addEffect("whoosh", item.start + 0.2);
+      if (item.start > 0 && !isWipe(beatIndex)) addEffect("whoosh", item.start + 0.2);
     } else {
       segments.at(-1).end = item.end;
     }
@@ -418,7 +484,7 @@ const buildReel = async (post, index) => {
     if (!segment.isLast) addEffect("whoosh", segment.end - 0.2);
   }
 
-  const cards = beats.map((item, k) => ({ id: `c${pad(k + 1)}`, text: item.beat.card, start: item.start, end: item.end, comTela: item.telas.length > 0 }));
+  const cards = beats.map((item, k) => ({ id: `c${pad(k + 1)}`, text: item.beat.card, start: item.start, end: item.end, comTela: item.telas.length > 0, palette: palettes[k] }));
   const lines = beats.map((item, k) => ({ id: `l${pad(k + 1)}`, start: item.start, end: item.end, words: item.words }));
 
   // Recria só o que o script gera; a pasta fica (o Windows não a apaga enquanto um preview a usa, e .hyperframes guarda o histórico).
@@ -431,7 +497,7 @@ const buildReel = async (post, index) => {
   if (music) copyFileSync(music, join(project, "assets", "trilha.mp3"));
   for (const { file } of Object.values(SFX)) copyFileSync(join(HERE, "sfx", file), join(project, "assets", "sfx", file));
 
-  writeFileSync(join(project, "compositions", "fundo.html"), fundoScene(total));
+  writeFileSync(join(project, "compositions", "fundo.html"), fundoScene(total, phases));
   writeFileSync(join(project, "compositions", "painel.html"), painelScene(layers, segments));
   writeFileSync(join(project, "compositions", "cards.html"), cardsScene(cards));
   writeFileSync(join(project, "compositions", "legendas.html"), legendasScene(lines));

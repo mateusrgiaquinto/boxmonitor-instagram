@@ -1,0 +1,13 @@
+ROTEIRO DO REEL
+
+Ninguém te conta  | Tela: Ninguém te conta
+que oficina perde cliente às 10 da noite.  | Tela: Perde cliente às 22h
+É quando ele lembra da revisão.  | Tela: Ele lembra da revisão
+Manda mensagem. Você tá dormindo.  | Tela: Você tá dormindo
+Às 8 você responde. Ele já foi pra outra.  | Tela: Já foi pra outra
+No BoxMonitor, sua oficina tem link de agendamento.  | Tela: Link de agendamento
+Ele escolhe o dia. O horário. Confirma.  | Tela: Dia. Horário. Confirma.
+Às 10 da noite, às 2 da manhã, tanto faz.  | Tela: Qualquer hora
+Você acorda com “Novo agendamento”, entendeu?  | Tela: Acorda agendado
+Põe o link na bio  | Tela: Link na bio
+e para de perder cliente às 10 da noite.  | Tela: Chega de perder às 22h

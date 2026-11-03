@@ -142,12 +142,80 @@ ${topo(`Serviço · ${DEMO.placa}`, `${DEMO.carro} · ${DEMO.cliente}`)}
     };
   },
 
-  // Notificação chegando no celular do cliente (tela de bloqueio).
-  notificacao: ({ titulo, texto }) => ({
+  // Rastreio público: qualquer um digita a placa, sem login e sem baixar app.
+  placa: ({ digitado = false }) => ({
+    alvo: digitado ? ".t-botao" : ".t-campo",
+    html: `
+${topo("Acompanhe seu veículo", "boxmonitor.com.br/rastreio")}
+<p class="t-texto">Digite a placa e veja em que etapa está o serviço do seu veículo.</p>
+<p class="t-rotulo">Placa do veículo</p>
+<div class="t-campo">${digitado
+  ? `${[...DEMO.placa].map((letra) => `<span class="ch">${letra}</span>`).join("")}<span class="cursor"></span>`
+  : `<span class="t-placeholder">ABC1D23</span>`}</div>
+<div class="t-botao">Ver andamento</div>`,
+  }),
+
+  // Link de agendamento da oficina: o cliente escolhe o dia e o horário sozinho.
+  // passo: "dia" | "horario" | "confirmar" | "agendado"
+  agenda: ({ passo = "dia" }) => {
+    const dias = [["Seg", "16"], ["Ter", "17"], ["Qua", "18"], ["Qui", "19"], ["Sex", "20"]];
+    const horarios = ["08:00", "09:30", "11:00", "14:00", "15:30", "17:00"];
+    const escolheuHora = passo === "confirmar" || passo === "agendado";
+    const rodape = passo === "agendado"
+      ? `<div class="t-aprovado">✓ Horário agendado.</div>`
+      : `<div class="t-botao ${escolheuHora ? "" : "apagado"}">Confirmar agendamento</div>`;
+    return {
+      alvo: { dia: ".dia.sel", horario: ".slot.sel", confirmar: ".t-botao" }[passo],
+      html: `
+${topo("Agendar serviço", DEMO.oficina)}
+<p class="t-rotulo">Dia</p>
+<div class="t-dias">${dias.map(([semana, dia]) => `<div class="dia ${dia === "19" ? "sel" : ""}"><span>${semana}</span><b>${dia}</b></div>`).join("")}</div>
+<p class="t-rotulo">Horário</p>
+<div class="t-slots">${horarios.map((hora) => `<div class="slot ${passo !== "dia" && hora === "08:00" ? "sel" : ""}">${hora}</div>`).join("")}</div>
+${rodape}`,
+    };
+  },
+
+  // Lado da oficina: "Registrar atualização", feito pelo celular do lado do carro.
+  // A mensagem combina com a etapa; sem mensagem, aparece o campo vazio (é opcional no app).
+  atualizar: ({ etapa = "Em serviço", toque = true }) => ({
+    alvo: toque ? ".t-botao" : undefined,
+    html: `
+${topo("Registrar atualização", DEMO.oficina)}
+<p class="t-rotulo">Veículo</p>
+<div class="t-select">${DEMO.placa} · ${DEMO.carro}<span>▾</span></div>
+<p class="t-rotulo">Nova etapa</p>
+<div class="t-select marcado-campo">${etapa}<span>▾</span></div>
+<p class="t-rotulo">Mensagem para o cliente (opcional)</p>
+<div class="t-select t-mensagem">${{
+  "Em diagnóstico": "Encontramos desgaste nas pastilhas de freio dianteiras.",
+  "Pronto para retirada": "Tudo certo, já pode buscar!",
+}[etapa] ?? `<span class="t-placeholder">Escreva uma mensagem</span>`}</div>
+<div class="t-botao">Registrar atualização</div>`,
+  }),
+
+  // "Minhas manutenções": o painel do carro do cliente, com a próxima troca.
+  painel: ({ destaque = false }) => ({
+    alvo: destaque ? ".t-manut li:first-child" : undefined,
+    html: `
+${topo("Minhas manutenções", `${DEMO.placa} · ${DEMO.carro}`)}
+<div class="t-registro">
+  <p class="t-rotulo">Situação do carro</p>
+  <span class="t-chip">Manutenção próxima</span>
+  <p class="t-forte">Próxima: Troca de óleo e filtro, em 18/12/2026.</p>
+</div>
+<ul class="t-manut">
+  <li class="${destaque ? "destaque" : ""}"><div><p class="t-forte">Troca de óleo e filtro</p><p class="t-periodo ${destaque ? "marcado" : ""}">Próxima: 18/12/2026</p></div><span class="t-chip">Vence em breve</span></li>
+  <li><div><p class="t-forte">Alinhamento e balanceamento</p><p class="t-periodo">Próxima aos 90.000 km</p></div><span class="t-chip verde">Em dia</span></li>
+</ul>`,
+  }),
+
+  // Notificação chegando no celular (tela de bloqueio).
+  notificacao: ({ titulo, texto, hora = "14:32", dia = `quarta-feira, ${DEMO.data}` }) => ({
     escura: true,
     html: `
-<p class="t-hora">14:32</p>
-<p class="t-dia">quarta-feira, ${DEMO.data}</p>
+<p class="t-hora">${hora}</p>
+<p class="t-dia">${dia}</p>
 <div class="t-notificacao">
   <div class="t-app"><img src="assets/logo.png" alt="" /><span>BOXMONITOR</span><em>agora</em></div>
   <p class="t-forte">${titulo}</p>
@@ -313,4 +381,23 @@ export const TELA_CSS = `
 .t-obturador { align-self:center; width:90px; height:90px; border-radius:50%; border:6px solid #fff; display:flex; align-items:center; justify-content:center; flex:none; }
 .t-obturador span { width:66px; height:66px; border-radius:50%; background:#fff; }
 .t-flash { position:absolute; inset:0; background:#fff; opacity:0; }
+.t-texto { font-size:26px; font-weight:600; color:#4a5568; line-height:1.3; }
+.t-campo { background:#fff; border:3px solid #003399; border-radius:12px; padding:14px 18px; height:72px; font-family:"Barlow Condensed";
+  font-weight:800; font-size:44px; letter-spacing:6px; display:flex; align-items:center; color:#1a1d21; }
+.t-placeholder { color:#9aa4ae; }
+.cursor { display:inline-block; width:4px; height:40px; margin-left:6px; background:#003399; }
+.t-dias { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; }
+.dia { background:#fff; border:2px solid #cfd6dd; border-radius:12px; padding:10px 0; text-align:center; display:flex; flex-direction:column; }
+.dia span { font-size:22px; font-weight:700; color:#4a5568; } .dia b { font-family:"Barlow Condensed"; font-size:40px; }
+.dia.sel { background:#003399; border-color:#003399; color:#fff; } .dia.sel span { color:#ffc72c; }
+.t-slots { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+.slot { background:#fff; border:2px solid #cfd6dd; border-radius:12px; padding:12px 0; text-align:center; font-size:30px; font-weight:700; }
+.slot.sel { background:#ffc72c; border-color:#ffc72c; color:#001f66; }
+.t-botao.apagado { opacity:.45; }
+.t-dias + .t-rotulo, .t-slots + .t-botao, .t-slots + .t-aprovado { margin-top:6px; }
+.marcado-campo { border-color:#ffc72c; box-shadow:0 0 0 3px #ffc72c; }
+.t-mensagem { color:#4a5568; font-weight:500; }
+.t-manut { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.t-manut li { display:flex; justify-content:space-between; align-items:center; gap:12px; background:#fff; padding:14px 18px; border-radius:12px; border:3px solid transparent; }
+.t-manut li.destaque { border-color:#ffc72c; }
 `;

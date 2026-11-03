@@ -1,0 +1,13 @@
+ROTEIRO DO REEL
+
+A concessionária lembra dos 6 meses do seu cliente.  | Tela: A concessionária lembra
+Você não.  | Tela: Você não.
+Ela não é melhor que você, cara.  | Tela: Não é melhor que você
+Ela só lembra a data.  | Tela: Só lembra a data
+No BoxMonitor, seu cliente tem o painel do carro.  | Tela: Painel do carro
+Vê a próxima troca: 18 de dezembro.  | Tela: Próxima troca: 18/12
+E 15 dias antes, recebe o lembrete da sua oficina.  | Tela: 15 dias antes
+Não da concessionária. Da sua.  | Tela: Da sua oficina
+E daqui 6 meses ele volta pra quem lembrou, sabe?  | Tela: Volta pra quem lembrou
+Salva esse  | Tela: Salva esse
+e lembra do seu cliente antes da concessionária.  | Tela: Lembra antes dela
