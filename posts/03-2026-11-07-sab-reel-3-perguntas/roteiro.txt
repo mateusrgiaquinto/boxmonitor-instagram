@@ -1,0 +1,13 @@
+ROTEIRO DO REEL
+
+Três perguntas  | Tela: 3 perguntas
+antes de deixar seu carro na oficina.  | Tela: Antes de deixar o carro
+A terceira... ninguém faz.  | Tela: A nº 3 ninguém faz
+Um: vai ter foto do problema?  | Tela: #1 Foto do problema?
+Dois: eu aprovo antes de começar?  | Tela: #2 Aprovo antes?
+Três: como eu acompanho sem ligar?  | Tela: #3 Sem ficar ligando?
+Ninguém pergunta, cara. E fica três dias sem notícia.  | Tela: 3 dias sem notícia
+Oficina com BoxMonitor responde as três.  | Tela: BoxMonitor responde as 3
+A foto vem no orçamento, e você aprova no celular.  | Tela: Foto + aprova no celular
+E digita a placa pra ver a etapa, sabe?  | Tela: Placa e pronto
+Manda pra sua oficina as três perguntas.  | Tela: Manda as 3 perguntas

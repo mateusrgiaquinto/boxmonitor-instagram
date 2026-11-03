@@ -5,14 +5,18 @@ const HASHTAGS_PRODUTO =
 const HASHTAGS_DICAS =
   "#dicasdemecanica #gestaodeoficina #empreendedorismo #pequenonegocio #mecanicoautomotivo #oficinamecanica";
 const HASHTAGS_REEL = "#oficinamecanica #mecanicoautomotivo #gestaodeoficina";
+// Reels de sábado falam com o dono do carro, não com a oficina.
+const HASHTAGS_CLIENTE = "#manutencaoautomotiva #donodecarro #dicasdecarro";
+const CHAMADA_CLIENTE = "👉 Pergunta pra sua oficina se ela usa o BoxMonitor. Link na bio.";
 
-// Reels saem às 12h de segunda e quarta; o carrossel do mesmo dia passa para as 15h.
+// Reels saem às 12h de segunda a quinta e no sábado; o carrossel do mesmo dia passa para as 15h.
 const DEPOIS_DO_REEL = "15:00:00-03:00";
 
 // Reels: o vídeo sai de `npm run video -- <slug>` (HyperFrames + voz ElevenLabs) em videos/<slug>.mp4 e só é publicado se existir.
 // Cada beat: `say` é a fala (vira áudio e legenda, números por extenso para a voz), `card` é o texto grande na tela e
 // `tela` (opcional) é a tela do BoxMonitor recriada em video/telas.mjs; uma lista de telas muda durante a fala.
 const ORCAMENTO_FREIO = [["Discos e pastilhas dianteiras", 800], ["Mão de obra", 180]];
+const ORCAMENTO_800 = [["Discos e pastilhas dianteiras", 640], ["Mão de obra", 160]];
 
 export const posts = [
   // ───────── SEMANA 1 ─────────
@@ -160,6 +164,44 @@ Sem planilha, sem caderno, sem ligação perdida.
 ${HASHTAGS_PRODUTO}`,
   },
 
+  {
+    slug: "03-2026-11-07-sab-reel-3-perguntas",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "*3 perguntas* antes de deixar o carro" },
+    beats: [
+      { say: "[seriously] Três perguntas", card: "*3 perguntas*" },
+      { say: "antes de deixar seu carro na oficina.", card: "Antes de *deixar o carro*" },
+      { say: "[mysteriously] A terceira... ninguém faz.", card: "A nº 3 *ninguém faz*" },
+      { say: "[curious] Um: vai ter foto do problema?", card: "#1 *Foto do problema?*" },
+      { say: "Dois: eu aprovo antes de começar?", card: "#2 *Aprovo antes?*" },
+      { say: "[emphatically] Três: como eu acompanho sem ligar?", card: "#3 *Sem ficar ligando?*" },
+      { say: "[sighs] Ninguém pergunta, cara. E fica três dias sem notícia.", card: "*3 dias* sem notícia" },
+      { say: "[confident] Oficina com BoxMonitor responde as três.", card: "BoxMonitor *responde as 3*", tela: { tipo: "foto", medida: true } },
+      {
+        say: "A foto vem no orçamento, e você aprova no celular.",
+        card: "Foto + *aprova no celular*",
+        tela: [{ tipo: "orcamento", passo: "toque" }, { tipo: "orcamento", passo: "aprovado" }],
+      },
+      {
+        say: "[relieved] E digita a placa pra ver a etapa, sabe?",
+        card: "Placa *e pronto*",
+        tela: [{ tipo: "placa", digitado: true }, { tipo: "etapas", etapa: "in_service" }],
+      },
+      { say: "[playfully] Manda pra sua oficina as três perguntas.", card: "Manda *as 3 perguntas*" },
+    ],
+    caption: `3 perguntas antes de deixar seu carro na oficina. A número 3 quase ninguém faz. Manda pra sua oficina e faz as três.
+
+1. Vou receber foto do problema?
+2. Eu aprovo o orçamento antes do serviço começar?
+3. Como eu acompanho o carro sem ficar ligando?
+
+Na oficina que usa o BoxMonitor, a foto chega junto do orçamento, você aprova pelo celular e acompanha a etapa do serviço digitando a placa. Sem baixar nada.
+
+${CHAMADA_CLIENTE}
+
+${HASHTAGS_CLIENTE}`,
+  },
+
   // ───────── SEMANA 2 ─────────
   {
     slug: "04-2026-11-09-seg-reel-ja-ficou-pronto",
@@ -221,6 +263,32 @@ Sem "eu não falei isso". Sem prejuízo.
 👉 Link na bio.
 
 ${HASHTAGS_PRODUTO}`,
+  },
+  {
+    slug: "04-2026-11-10-ter-reel-foto-da-nota",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Para de digitar *a nota do fornecedor*" },
+    beats: [
+      { say: "[exasperated] Para de digitar nota de fornecedor.", card: "Para de *digitar a nota*" },
+      { say: "[firmly] Tira uma foto.", card: "Tira *1 foto*" },
+      { say: "[sighs] Chegou a caixa: quarenta itens, cara.", card: "Chegou: *40 itens*" },
+      { say: "E você lá, linha por linha, no fim do dia.", card: "Linha *por linha*" },
+      { say: "[frustrated] Errou um número, o estoque não bate.", card: "Errou 1 número? *Não bate*" },
+      { say: "[confident] No BoxMonitor, você sobe a lista do jeito que tiver.", card: "Do jeito *que tiver*", tela: { tipo: "importar" } },
+      { say: "Planilha, PDF... ou foto da nota.", card: "Até *foto da nota*", tela: { tipo: "importar", passo: "foto" } },
+      { say: "Ele mostra o que entendeu, e você confere.", card: "Você *confere antes*", tela: { tipo: "importar", passo: "conferir" } },
+      { say: "[satisfied] Aplicou, entrada feita, entendeu?", card: "Entrada *feita*", tela: { tipo: "importar", passo: "aplicado" } },
+      { say: "[playfully] Manda pro mecânico que ainda digita nota no fim do dia.", card: "Manda pro *mecânico*" },
+    ],
+    caption: `Para de digitar a nota do fornecedor no estoque. Tira 1 foto. Manda pro mecânico que ainda digita nota no fim do dia.
+
+Chegou a caixa com 40 itens e lá vai você, linha por linha. Erra um número e o estoque já não bate.
+
+No BoxMonitor você sobe a lista do jeito que tiver: planilha, PDF, texto ou foto. O sistema mostra o que entendeu de cada linha, você confere e aplica a entrada no estoque.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
   },
   {
     slug: "05-2026-11-11-qua-reel-eu-nao-autorizei",
@@ -332,6 +400,42 @@ No BoxMonitor, cada mudança de status manda aviso automático pro cliente.
 ${HASHTAGS_PRODUTO}`,
   },
 
+  {
+    slug: "06-2026-11-14-sab-reel-orcamento-por-telefone",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Nunca aprova *por telefone*" },
+    beats: [
+      { say: "[firmly] Nunca aprova conserto de oitocentos reais", card: "Conserto de *R$ 800*" },
+      { say: "por telefone.", card: "*Por telefone*? Não." },
+      { say: "[sighs] Você no trabalho, ouve meia explicação", card: "*Meia* explicação" },
+      { say: "e fala “pode fazer”.", card: "“Pode *fazer*”" },
+      { say: "[frustrated] Na hora de pagar, nem lembra o que aprovou.", card: "Nem lembra *o que aprovou*" },
+      { say: "[confident] Na oficina com BoxMonitor, o orçamento chega no celular.", card: "Orçamento *no seu celular*", tela: { tipo: "orcamento", itens: ORCAMENTO_800 } },
+      { say: "Cada item, o valor e a foto.", card: "Item, valor *e foto*", tela: { tipo: "orcamento", itens: ORCAMENTO_800 } },
+      {
+        say: "[calmly] Você lê com calma e aprova em dois toques.",
+        card: "Aprova em *2 toques*",
+        tela: [
+          { tipo: "orcamento", itens: ORCAMENTO_800, passo: "toque" },
+          { tipo: "orcamento", itens: ORCAMENTO_800, passo: "confirmar" },
+          { tipo: "orcamento", itens: ORCAMENTO_800, passo: "aprovado" },
+        ],
+      },
+      { say: "[satisfied] E fica registrado, entendeu?", card: "Fica *registrado*", tela: { tipo: "orcamento", itens: ORCAMENTO_800, passo: "aprovado" } },
+      { say: "[warmly] Ninguém discute depois.", card: "Ninguém *discute depois*" },
+      { say: "[playfully] Manda pra sua oficina. Oitocentos reais, só no celular.", card: "R$ 800? *Só no celular*" },
+    ],
+    caption: `Nunca aprova um conserto de R$ 800 por telefone. Manda esse pra sua oficina.
+
+O telefone toca no meio do trabalho, você ouve meia explicação e fala "pode fazer". Na hora de pagar, ninguém lembra direito o que foi aprovado.
+
+Na oficina que usa o BoxMonitor, o orçamento chega no seu celular com cada item, o valor e a foto do problema. Você lê com calma, aprova em dois toques e fica registrado.
+
+${CHAMADA_CLIENTE}
+
+${HASHTAGS_CLIENTE}`,
+  },
+
   // ───────── SEMANA 3 ─────────
   {
     slug: "07-2026-11-16-seg-reel-10-etapas",
@@ -406,6 +510,39 @@ Cadastre seus serviços com a periodicidade em km (troca de óleo, filtro, corre
 👉 Link na bio.
 
 ${HASHTAGS_PRODUTO}`,
+  },
+  {
+    slug: "07-2026-11-17-ter-reel-aguardando-pecas",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "*Dia 3* sem notícia" },
+    beats: [
+      { say: "[seriously] No terceiro dia sem notícia,", card: "*Dia 3* sem notícia" },
+      { say: "seu cliente acha que você esqueceu o carro.", card: "Acha que *você esqueceu*" },
+      { say: "[sighs] Você não esqueceu, cara. Tá esperando peça.", card: "Tá esperando *peça*" },
+      { say: "[frustrated] E ele imaginando o carro largado num canto.", card: "Carro *largado no canto*" },
+      {
+        say: "[confident] No BoxMonitor, a etapa vira aguardando peças.",
+        card: "*Aguardando peças*",
+        tela: { tipo: "atualizar", etapa: "Aguardando peças", mensagem: "", toque: false },
+      },
+      { say: "E você escreve: chega quinta de manhã.", card: "“Chega *quinta*”", tela: { tipo: "atualizar", etapa: "Aguardando peças" } },
+      {
+        say: "Ele recebe o aviso na hora.",
+        card: "Aviso *na hora*",
+        tela: { tipo: "notificacao", titulo: "Aguardando peças", texto: "BRA2E19 · Auto Center Demo", hora: "10:14", dia: "terça-feira, 17/11" },
+      },
+      { say: "[relieved] E entende por que o carro tá parado, sabe?", card: "Parado *por um motivo*", tela: { tipo: "etapas", etapa: "awaiting_parts" } },
+      { say: "[playfully] Manda pro mecânico com peça atrasada e cliente sem notícia.", card: "Peça atrasada, *cliente com notícia*" },
+    ],
+    caption: `No terceiro dia sem notícia, seu cliente acha que você esqueceu o carro dele. Manda pro mecânico com peça atrasada e cliente sem notícia.
+
+Você não esqueceu. A peça atrasou e o fornecedor não responde. Só que o cliente não sabe disso.
+
+No BoxMonitor você muda a etapa pra "Aguardando peças" e escreve uma mensagem, tipo "a peça chega quinta de manhã". O cliente recebe o aviso e vê na placa que o carro está parado por um motivo.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
   },
   {
     slug: "08-2026-11-18-qua-reel-lembrete-troca-de-oleo",
@@ -518,6 +655,37 @@ Qual você mais escuta por aí? Comenta 👇
 ${HASHTAGS_PRODUTO}`,
   },
 
+  {
+    slug: "09-2026-11-21-sab-reel-oficina-no-chute",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Oficina no chute: *R$ 1.200*" },
+    beats: [
+      { say: "[seriously] Escolher oficina no chute", card: "Oficina *no chute*" },
+      { say: "pode te custar mil e duzentos reais.", card: "Custa *R$ 1.200*" },
+      { say: "[sighs] Placa na rua, indicação do cunhado...", card: "Indicação *do cunhado*" },
+      { say: "[frustrated] e você só descobre na hora de pagar.", card: "Descobre *na hora de pagar*" },
+      { say: "[confident] No BoxMonitor, as oficinas aparecem pela avaliação.", card: "Oficinas *por avaliação*", tela: { tipo: "oficinas" } },
+      { say: "De quem deixou o carro lá e retirou.", card: "De quem *deixou o carro*", tela: { tipo: "oficinas", destaque: true } },
+      { say: "[impressed] Quatro vírgula oito, trinta e duas avaliações.", card: "*4,8* com 32 avaliações", tela: { tipo: "oficinas", destaque: true } },
+      {
+        say: "Escolhe o horário livre e agenda ali mesmo.",
+        card: "Agenda *ali mesmo*",
+        tela: [{ tipo: "agenda", passo: "horario" }, { tipo: "agenda", passo: "confirmar" }, { tipo: "agenda", passo: "agendado" }],
+      },
+      { say: "[relieved] Sem chute e sem cunhado, sabe?", card: "Sem *chute*" },
+      { say: "[playfully] Salva esse antes de escolher a próxima oficina.", card: "*Salva* esse" },
+    ],
+    caption: `Escolher oficina no chute pode te custar R$ 1.200. Salva esse antes de escolher a próxima.
+
+Placa na rua, indicação do cunhado, e você só descobre como foi na hora de pagar.
+
+No BoxMonitor você vê as oficinas com agenda aberta pela avaliação de quem já deixou o carro lá. Escolhe, vê os horários livres e agenda ali mesmo.
+
+👉 Link na bio.
+
+${HASHTAGS_CLIENTE}`,
+  },
+
   // ───────── SEMANA 4 ─────────
   {
     slug: "10-2026-11-23-seg-reel-os-sem-digitar-preco",
@@ -568,6 +736,36 @@ No BoxMonitor sua oficina tem um link de agendamento. Coloca na bio, no status d
 👉 Link na bio.
 
 ${HASHTAGS_PRODUTO}`,
+  },
+  {
+    slug: "10-2026-11-24-ter-reel-cinco-estrelas",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "5 estrelas. *Ninguém viu.*" },
+    beats: [
+      { say: "[warmly] Seu cliente te deu cinco estrelas.", card: "*5 estrelas*" },
+      { say: "[pointedly] Ninguém viu.", card: "*Ninguém viu.*" },
+      { say: "[sighs] Ele elogiou no balcão, apertou sua mão e foi embora.", card: "Elogiou *no balcão*" },
+      { say: "E quem procura oficina nunca ficou sabendo, cara.", card: "Ninguém *ficou sabendo*" },
+      { say: "[confident] No BoxMonitor, carro entregue, o cliente avalia a oficina.", card: "O cliente *avalia*", tela: { tipo: "avaliacao" } },
+      {
+        say: "Marca as estrelas e escreve, se quiser.",
+        card: "Estrelas *+ comentário*",
+        tela: [{ tipo: "avaliacao", estrelas: 5 }, { tipo: "avaliacao", estrelas: 5, comentario: true }],
+      },
+      { say: "[excited] E quem procura oficina pra agendar vê a sua nota.", card: "Quem procura *vê sua nota*", tela: { tipo: "oficinas" } },
+      { say: "Lá em cima, em melhor avaliadas.", card: "*Melhor avaliadas*", tela: { tipo: "oficinas", destaque: true } },
+      { say: "[proudly] Cinco estrelas trabalhando por você, sabe?", card: "Estrelas *que trabalham*" },
+      { say: "[playfully] Manda pro mecânico que ganha cinco estrelas só no balcão.", card: "Manda pro *mecânico*" },
+    ],
+    caption: `Seu cliente te deu 5 estrelas. Ninguém viu. Manda pro mecânico que ganha 5 estrelas só no balcão.
+
+Ele elogiou, apertou sua mão e foi embora. E quem procura oficina nunca ficou sabendo.
+
+No BoxMonitor, quando o carro é entregue, o cliente avalia a oficina com estrelas e um comentário. Quem procura oficina pra agendar vê a sua nota, e a lista pode ser ordenada pelas melhor avaliadas.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
   },
   {
     slug: "11-2026-11-25-qua-reel-3-motivos",
@@ -682,6 +880,37 @@ Ficou dúvida? Manda no direct que a gente responde. 📩
 ${HASHTAGS_PRODUTO}`,
   },
 
+  {
+    slug: "12-2026-11-28-sab-reel-oleo-atrasado",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Troca de óleo *6 meses atrasada*" },
+    beats: [
+      { say: "[knowingly] Seu carro tá seis meses atrasado", card: "*6 meses* atrasado" },
+      { say: "na troca de óleo.", card: "Na troca *de óleo*" },
+      { say: "[pointedly] E você nem sabe.", card: "E você *nem sabe*" },
+      { say: "[chuckles] Você lembra da última troca? Nem eu, cara.", card: "Lembra *da última*?" },
+      { say: "[sighs] O adesivo no para-brisa apagou faz tempo.", card: "O adesivo *apagou*" },
+      {
+        say: "[confident] No BoxMonitor, você registra a última troca, com a nota.",
+        card: "Registra *a última troca*",
+        tela: [{ tipo: "anterior" }, { tipo: "anterior", anexado: true }],
+      },
+      { say: "Aí o painel do carro mostra: manutenção atrasada.", card: "Manutenção *atrasada*", tela: { tipo: "painel", atrasada: true } },
+      { say: "[relieved] Abre e vê na hora o que tá vencido e o que tá em dia.", card: "Vencido *ou em dia*", tela: { tipo: "painel", atrasada: true, destaque: true } },
+      { say: "[warmly] Sem adesivo, sem caderninho no porta-luvas, sabe?", card: "Sem *adesivo*" },
+      { say: "[playfully] Manda pra quem tá atrasado na troca de óleo... e nem sabe.", card: "Atrasado *e nem sabe*" },
+    ],
+    caption: `Seu carro pode estar 6 meses atrasado na troca de óleo, e você nem sabe. Manda pra quem tá atrasado e nem sabe.
+
+O adesivo do para-brisa apagou e ninguém lembra a data.
+
+No BoxMonitor você cria sua conta com o CPF, registra a última troca com a nota fiscal e o painel do carro mostra o que está atrasado, o que vence em breve e o que está em dia.
+
+👉 Link na bio.
+
+${HASHTAGS_CLIENTE}`,
+  },
+
   // ───────── SEMANA 5 ─────────
   {
     slug: "13-2026-11-30-seg-reel-os-no-papel",
@@ -704,6 +933,31 @@ ${HASHTAGS_PRODUTO}`,
 O problema aparece 8 meses depois, quando o cliente volta perguntando o que você trocou no carro dele.
 
 No BoxMonitor cada serviço fica no histórico do carro: o que foi feito, a data, a quilometragem e a nota. Abre o carro e tá tudo lá.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+${HASHTAGS_REEL}`,
+  },
+  {
+    slug: "13-2026-12-01-ter-reel-whatsapp-pessoal",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "Orçamento *no WhatsApp pessoal*?" },
+    beats: [
+      { say: "[exasperated] Para de negociar orçamento", card: "Para de *negociar orçamento*" },
+      { say: "de novecentos reais no WhatsApp pessoal.", card: "R$ 900 *no WhatsApp pessoal*?" },
+      { say: "[sighs] Onze da noite, no meio da foto do seu filho:", card: "No meio *da foto do filho*" },
+      { say: "dá pra fazer por setecentos?", card: "“Faz por *700*?”" },
+      { say: "[frustrated] Três semanas depois, cadê o combinado?", card: "Cadê *o combinado*?" },
+      { say: "[confident] No BoxMonitor, a conversa fica dentro do serviço.", card: "Conversa *no serviço*", tela: { tipo: "conversa" } },
+      { say: "Junto do orçamento. Não no seu celular.", card: "*Junto* do orçamento", tela: [{ tipo: "conversa" }, { tipo: "conversa", aprovado: true }] },
+      { say: "[relieved] E o seu WhatsApp volta a ser seu, sabe?", card: "Seu WhatsApp *volta a ser seu*" },
+      { say: "[playfully] Manda pro mecânico que negocia orçamento às onze da noite.", card: "Manda pro *mecânico*" },
+    ],
+    caption: `Para de negociar orçamento de R$ 900 no seu WhatsApp pessoal. Manda pro mecânico que negocia às 11 da noite.
+
+Onze da noite, no meio da foto do seu filho, chega "faz por 700?". Três semanas depois, ninguém acha o que foi combinado.
+
+No BoxMonitor cada serviço tem a conversa com o cliente, junto do orçamento: quanto foi, quando foi enviado e quando ele aprovou. O cliente vê tudo ao entrar no rastreio com o CPF.
 
 👉 Cadastre sua oficina pelo link da bio.
 

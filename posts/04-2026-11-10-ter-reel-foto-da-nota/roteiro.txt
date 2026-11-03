@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Para de digitar nota de fornecedor.  | Tela: Para de digitar a nota
+Tira uma foto.  | Tela: Tira 1 foto
+Chegou a caixa: quarenta itens, cara.  | Tela: Chegou: 40 itens
+E você lá, linha por linha, no fim do dia.  | Tela: Linha por linha
+Errou um número, o estoque não bate.  | Tela: Errou 1 número? Não bate
+No BoxMonitor, você sobe a lista do jeito que tiver.  | Tela: Do jeito que tiver
+Planilha, PDF... ou foto da nota.  | Tela: Até foto da nota
+Ele mostra o que entendeu, e você confere.  | Tela: Você confere antes
+Aplicou, entrada feita, entendeu?  | Tela: Entrada feita
+Manda pro mecânico que ainda digita nota no fim do dia.  | Tela: Manda pro mecânico

@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Seu cliente te deu cinco estrelas.  | Tela: 5 estrelas
+Ninguém viu.  | Tela: Ninguém viu.
+Ele elogiou no balcão, apertou sua mão e foi embora.  | Tela: Elogiou no balcão
+E quem procura oficina nunca ficou sabendo, cara.  | Tela: Ninguém ficou sabendo
+No BoxMonitor, carro entregue, o cliente avalia a oficina.  | Tela: O cliente avalia
+Marca as estrelas e escreve, se quiser.  | Tela: Estrelas + comentário
+E quem procura oficina pra agendar vê a sua nota.  | Tela: Quem procura vê sua nota
+Lá em cima, em melhor avaliadas.  | Tela: Melhor avaliadas
+Cinco estrelas trabalhando por você, sabe?  | Tela: Estrelas que trabalham
+Manda pro mecânico que ganha cinco estrelas só no balcão.  | Tela: Manda pro mecânico

@@ -177,8 +177,8 @@ ${rodape}`,
   },
 
   // Lado da oficina: "Registrar atualização", feito pelo celular do lado do carro.
-  // A mensagem combina com a etapa; sem mensagem, aparece o campo vazio (é opcional no app).
-  atualizar: ({ etapa = "Em serviço", toque = true }) => ({
+  // A mensagem combina com a etapa (ou vem em `mensagem`; "" deixa o campo vazio, que é opcional no app).
+  atualizar: ({ etapa = "Em serviço", toque = true, mensagem }) => ({
     alvo: toque ? ".t-botao" : undefined,
     html: `
 ${topo("Registrar atualização", DEMO.oficina)}
@@ -187,15 +187,30 @@ ${topo("Registrar atualização", DEMO.oficina)}
 <p class="t-rotulo">Nova etapa</p>
 <div class="t-select marcado-campo">${etapa}<span>▾</span></div>
 <p class="t-rotulo">Mensagem para o cliente (opcional)</p>
-<div class="t-select t-mensagem">${{
+<div class="t-select t-mensagem">${(mensagem ?? {
   "Em diagnóstico": "Encontramos desgaste nas pastilhas de freio dianteiras.",
+  "Aguardando peças": "A peça chega quinta de manhã.",
   "Pronto para retirada": "Tudo certo, já pode buscar!",
-}[etapa] ?? `<span class="t-placeholder">Escreva uma mensagem</span>`}</div>
+}[etapa]) || `<span class="t-placeholder">Escreva uma mensagem</span>`}</div>
 <div class="t-botao">Registrar atualização</div>`,
   }),
 
   // "Minhas manutenções": o painel do carro do cliente, com a próxima troca.
-  painel: ({ destaque = false }) => ({
+  // `atrasada`: a última troca registrada passou do prazo de referência (6 meses para o óleo do motor).
+  painel: ({ destaque = false, atrasada = false }) => atrasada ? {
+    alvo: destaque ? ".t-manut li:first-child" : undefined,
+    html: `
+${topo("Minhas manutenções", `${DEMO.placa} · ${DEMO.carro}`)}
+<div class="t-registro">
+  <p class="t-rotulo">Situação do carro</p>
+  <span class="t-chip vermelho-forte">Manutenção atrasada</span>
+  <p class="t-forte">1 manutenção periódica atrasada.</p>
+</div>
+<ul class="t-manut">
+  <li class="${destaque ? "destaque" : ""}"><div><p class="t-forte">Troca de óleo do motor</p><p class="t-periodo ${destaque ? "marcado" : ""}">Venceu em 12/05/2026</p></div><span class="t-chip vermelho">Atrasada</span></li>
+  <li><div><p class="t-forte">Alinhamento e balanceamento</p><p class="t-periodo">Próxima em 04/06/2027</p></div><span class="t-chip verde">Em dia</span></li>
+</ul>`,
+  } : ({
     alvo: destaque ? ".t-manut li:first-child" : undefined,
     html: `
 ${topo("Minhas manutenções", `${DEMO.placa} · ${DEMO.carro}`)}
@@ -285,6 +300,126 @@ ${topo(`Histórico · ${DEMO.placa}`, DEMO.carro)}
     }).join("");
     return { alvo: editando ? ".marcado" : undefined, html: `${topo("Estoque", DEMO.oficina)}<ul class="t-estoque">${linhas}</ul>` };
   },
+
+  // Estoque › "Atualizar por arquivo": a nota do fornecedor vira entrada no estoque, conferida antes de gravar.
+  // passo: "escolher" (tipos de arquivo) | "foto" (câmera na nota) | "conferir" (o que foi entendido) | "aplicado"
+  importar: ({ passo = "escolher" }) => {
+    const linhas = [["Filtro de óleo", 2, 12], ["Óleo 5W30 (litro)", 6, 24], ["Pastilha dianteira Gol", 2, 4]];
+    if (passo === "foto") {
+      return {
+        escura: true,
+        alvo: ".t-obturador",
+        html: `
+<div class="t-camera">
+  <span class="canto c1"></span><span class="canto c2"></span><span class="canto c3"></span><span class="canto c4"></span>
+  <div class="t-nota">
+    <p class="t-nota-topo">NOTA FISCAL · DISTRIBUIDORA DEMO</p>
+    ${linhas.map(([nome, , qtd]) => `<p><span>${nome}</span><b>${qtd}</b></p>`).join("")}
+    <p><span>Palheta 20"</span><b>4</b></p>
+  </div>
+  <p class="t-legenda-foto">nota do fornecedor</p>
+</div>
+<div class="t-obturador"><span></span></div>
+<div class="t-flash"></div>`,
+      };
+    }
+    if (passo === "conferir") {
+      return {
+        alvo: ".t-botao",
+        html: `
+${topo("Conferir arquivo", "nota-fornecedor.jpg")}
+<p class="t-texto">3 para atualizar, 1 para cadastrar e 0 que não poderão ser registrados.</p>
+<ul class="t-import">${linhas.map(([nome, saldo, qtd]) => `<li><p class="t-forte">${nome}</p><p class="t-periodo">Entrada em ${nome}: saldo ${saldo} → ${saldo + qtd}</p></li>`).join("")}
+<li><p class="t-forte">Palheta 20"</p><p class="t-periodo">Cadastrar produto novo com saldo 4</p></li></ul>
+<div class="t-botao">Aplicar no estoque</div>`,
+      };
+    }
+    if (passo === "aplicado") {
+      return {
+        html: `
+${topo("Estoque", DEMO.oficina)}
+<ul class="t-estoque">${linhas.map(([nome, saldo, qtd]) => `<li><p class="t-forte">${nome}</p><b ${contar(saldo + qtd, { de: saldo, fmt: "int", sufixo: " un" })}>${saldo + qtd} un</b></li>`).join("")}</ul>
+<div class="t-aprovado">✓ Estoque atualizado</div>`,
+      };
+    }
+    return {
+      alvo: ".t-tipos .foto",
+      html: `
+${topo("Atualizar por arquivo", `Estoque · ${DEMO.oficina}`)}
+<p class="t-texto">Suba a lista do jeito que tiver. Você confere o que foi entendido antes de gravar.</p>
+<p class="t-rotulo">A quantidade do arquivo é</p>
+<div class="t-select">Entrada (soma ao saldo atual)<span>▾</span></div>
+<div class="t-tipos"><span>Planilha</span><span>PDF</span><span>Texto</span><span class="foto">Foto</span></div>`,
+    };
+  },
+
+  // "Agendar serviço": as oficinas com agenda aberta, por avaliação de quem já deixou o carro lá.
+  oficinas: ({ destaque = false }) => {
+    const lista = [["Auto Center Demo", "4,8", 32, 5], ["Oficina Exemplo", "4,5", 17, 4], ["Mecânica Modelo", "", 0, 0]];
+    return {
+      alvo: destaque ? ".t-oficinas li:first-child" : undefined,
+      html: `
+${topo("Agendar serviço", "Escolha a oficina para ver os horários livres.")}
+<div class="t-ordem"><span class="sel">★ Melhor avaliadas</span><span>Mais próximas</span></div>
+<ul class="t-oficinas">${lista.map(([nome, nota, total, cheias], index) => `<li class="${destaque && index === 0 ? "destaque" : ""}">
+  <p class="t-forte">${nome}</p>
+  <p class="t-nota-oficina">${total
+    ? `<span class="t-estrelas">${"★".repeat(cheias)}<i>${"★".repeat(5 - cheias)}</i></span> <b>${nota}</b> · ${total} avaliações`
+    : "Sem avaliações ainda"}</p></li>`).join("")}</ul>`,
+    };
+  },
+
+  // Rastreio do cliente, serviço entregue: "Avaliar a oficina" (estrelas obrigatórias, comentário opcional).
+  avaliacao: ({ estrelas = 0, comentario = false }) => {
+    let alvo;
+    if (comentario) alvo = ".t-botao";
+    else if (estrelas) alvo = ".t-estrelas-grandes span:last-child";
+    return {
+      alvo,
+      html: `
+${topo("Avaliar a oficina", `${DEMO.oficina} · ${DEMO.placa}`)}
+<span class="t-chip verde">Entregue</span>
+<p class="t-rotulo">Sua nota para a oficina</p>
+<div class="t-estrelas-grandes">${[1, 2, 3, 4, 5].map((n) => `<span class="${n <= estrelas ? "cheia" : ""}">★</span>`).join("")}</div>
+<p class="t-rotulo">Comentário (opcional)</p>
+<div class="t-select t-mensagem">${comentario
+  ? "Explicaram tudo antes de fazer o serviço."
+  : `<span class="t-placeholder">Ex.: atendimento rápido, explicaram tudo antes</span>`}</div>
+<div class="t-botao">Enviar avaliação</div>`,
+    };
+  },
+
+  // Lado da oficina: "Conversa com o cliente" do serviço, com o orçamento em cima.
+  // aprovado: o cliente já respondeu o orçamento novo.
+  conversa: ({ aprovado = false }) => ({
+    html: `
+${topo("Conversa com o cliente", `${DEMO.placa} · ${DEMO.cliente}`)}
+<div class="t-registro t-orcamento-conversa">
+  <div class="t-linha"><p class="t-forte">Orçamento</p>${aprovado
+    ? `<span class="t-chip verde">Aprovado pelo cliente</span>`
+    : `<span class="t-chip">Aguardando o cliente</span>`}</div>
+  <p class="t-valor">${brl(850)}</p>
+  <p class="t-periodo">Enviado em 01/12 às 14:05${aprovado ? " · respondido em 01/12 às 14:40" : ""}</p>
+</div>
+<div class="t-balao cliente"><p>Dá pra fazer por 700?</p><em>${DEMO.cliente} · 13:52</em></div>
+<div class="t-balao oficina"><p>Consigo 850 com a mão de obra. Mandei o orçamento novo.</p><em>Você · 14:05</em></div>`,
+  }),
+
+  // "Registrar manutenção anterior" do cliente: serviço feito antes ou em outro lugar, com a nota fiscal.
+  anterior: ({ anexado = false }) => ({
+    alvo: anexado ? ".t-botao" : ".t-anexar",
+    html: `
+${topo("Manutenção anterior", `${DEMO.placa} · ${DEMO.carro}`)}
+<p class="t-rotulo">Tipo</p>
+<div class="t-select">Troca de óleo do motor<span>▾</span></div>
+<div class="t-duas"><div><p class="t-rotulo">Data</p><div class="t-select">12/11/2025</div></div>
+<div><p class="t-rotulo">KM</p><div class="t-select">78.900</div></div></div>
+<p class="t-rotulo">Nota fiscal</p>
+${anexado
+  ? `<div class="t-anexo"><div><p class="t-forte">nota-troca-de-oleo.pdf</p><p class="t-ok">✓ Nota anexada</p></div></div>`
+  : `<div class="t-anexar">+ Anexar nota fiscal</div>`}
+<div class="t-botao">Salvar manutenção</div>`,
+  }),
 
   // Lista curta de recursos, para fechar um Reel com vários itens.
   lista: ({ itens }) => ({
@@ -400,4 +535,36 @@ export const TELA_CSS = `
 .t-manut { list-style:none; display:flex; flex-direction:column; gap:10px; }
 .t-manut li { display:flex; justify-content:space-between; align-items:center; gap:12px; background:#fff; padding:14px 18px; border-radius:12px; border:3px solid transparent; }
 .t-manut li.destaque { border-color:#ffc72c; }
+.t-chip.vermelho-forte { background:#a8201a; color:#fff; }
+.t-nota { background:#fbfaf5; color:#1a1d21; width:520px; border-radius:6px; padding:22px 26px; display:flex; flex-direction:column; gap:8px;
+transform:rotate(-2deg); box-shadow:0 12px 30px rgba(0,0,0,.4); font-family:"Barlow Condensed"; font-weight:700; }
+.t-nota p { display:flex; justify-content:space-between; font-size:30px; border-bottom:2px dotted #b8bec4; padding-bottom:4px; }
+.t-nota .t-nota-topo { font-size:24px; letter-spacing:2px; color:#4a5568; border-bottom:3px solid #1a1d21; }
+.t-import { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.t-import li { background:#fff; border-radius:12px; padding:10px 18px; }
+.t-estoque li > b { font-size:30px; }
+.t-tipos { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-top:auto; }
+.t-tipos span { background:#fff; border:2px solid #cfd6dd; border-radius:12px; padding:22px 0; text-align:center; font-size:28px; font-weight:700; }
+.t-tipos .foto { border-color:#ffc72c; box-shadow:0 0 0 3px #ffc72c; }
+.t-ordem { display:flex; gap:6px; background:#dde2e7; border-radius:12px; padding:6px; align-self:flex-start; }
+.t-ordem span { font-size:26px; font-weight:700; padding:8px 18px; border-radius:8px; color:#4a5568; }
+.t-ordem .sel { background:#fff; color:#1a1d21; }
+.t-oficinas { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.t-oficinas li { background:#fff; border-radius:12px; padding:14px 18px; border:3px solid transparent; display:flex; flex-direction:column; gap:4px; }
+.t-oficinas li.destaque { border-color:#ffc72c; }
+.t-nota-oficina { font-size:26px; font-weight:600; color:#4a5568; }
+.t-nota-oficina b { color:#1a1d21; }
+.t-estrelas { color:#e0a800; letter-spacing:2px; } .t-estrelas i { font-style:normal; color:#cfd6dd; }
+.t-estrelas-grandes { display:flex; gap:10px; }
+.t-estrelas-grandes span { font-size:76px; line-height:1; color:#cfd6dd; }
+.t-estrelas-grandes span.cheia { color:#e0a800; }
+.t-orcamento-conversa { padding:18px 22px; gap:6px; }
+.t-linha { display:flex; justify-content:space-between; align-items:center; }
+.t-valor { font-family:"Barlow Condensed"; font-weight:800; font-size:52px; line-height:1; }
+.t-balao { max-width:80%; border-radius:18px; padding:12px 18px; font-size:26px; font-weight:600; display:flex; flex-direction:column; gap:4px; }
+.t-balao em { font-style:normal; font-size:20px; opacity:.7; }
+.t-balao.cliente { align-self:flex-start; background:#fff; }
+.t-balao.oficina { align-self:flex-end; background:#003399; color:#fff; }
+.t-duas { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.t-duas > div { display:flex; flex-direction:column; gap:14px; }
 `;

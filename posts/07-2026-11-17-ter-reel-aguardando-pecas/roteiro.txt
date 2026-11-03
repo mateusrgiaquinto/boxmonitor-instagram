@@ -1,0 +1,11 @@
+ROTEIRO DO REEL
+
+No terceiro dia sem notícia,  | Tela: Dia 3 sem notícia
+seu cliente acha que você esqueceu o carro.  | Tela: Acha que você esqueceu
+Você não esqueceu, cara. Tá esperando peça.  | Tela: Tá esperando peça
+E ele imaginando o carro largado num canto.  | Tela: Carro largado no canto
+No BoxMonitor, a etapa vira aguardando peças.  | Tela: Aguardando peças
+E você escreve: chega quinta de manhã.  | Tela: “Chega quinta”
+Ele recebe o aviso na hora.  | Tela: Aviso na hora
+E entende por que o carro tá parado, sabe?  | Tela: Parado por um motivo
+Manda pro mecânico com peça atrasada e cliente sem notícia.  | Tela: Peça atrasada, cliente com notícia

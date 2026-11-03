@@ -1,0 +1,9 @@
+No terceiro dia sem notícia, seu cliente acha que você esqueceu o carro dele. Manda pro mecânico com peça atrasada e cliente sem notícia.
+
+Você não esqueceu. A peça atrasou e o fornecedor não responde. Só que o cliente não sabe disso.
+
+No BoxMonitor você muda a etapa pra "Aguardando peças" e escreve uma mensagem, tipo "a peça chega quinta de manhã". O cliente recebe o aviso e vê na placa que o carro está parado por um motivo.
+
+👉 Cadastre sua oficina pelo link da bio.
+
+#oficinamecanica #mecanicoautomotivo #gestaodeoficina

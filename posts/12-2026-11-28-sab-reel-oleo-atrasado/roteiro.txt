@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Seu carro tá seis meses atrasado  | Tela: 6 meses atrasado
+na troca de óleo.  | Tela: Na troca de óleo
+E você nem sabe.  | Tela: E você nem sabe
+Você lembra da última troca? Nem eu, cara.  | Tela: Lembra da última?
+O adesivo no para-brisa apagou faz tempo.  | Tela: O adesivo apagou
+No BoxMonitor, você registra a última troca, com a nota.  | Tela: Registra a última troca
+Aí o painel do carro mostra: manutenção atrasada.  | Tela: Manutenção atrasada
+Abre e vê na hora o que tá vencido e o que tá em dia.  | Tela: Vencido ou em dia
+Sem adesivo, sem caderninho no porta-luvas, sabe?  | Tela: Sem adesivo
+Manda pra quem tá atrasado na troca de óleo... e nem sabe.  | Tela: Atrasado e nem sabe

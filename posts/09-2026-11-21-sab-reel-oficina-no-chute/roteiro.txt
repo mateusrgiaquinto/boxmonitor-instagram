@@ -1,0 +1,12 @@
+ROTEIRO DO REEL
+
+Escolher oficina no chute  | Tela: Oficina no chute
+pode te custar mil e duzentos reais.  | Tela: Custa R$ 1.200
+Placa na rua, indicação do cunhado...  | Tela: Indicação do cunhado
+e você só descobre na hora de pagar.  | Tela: Descobre na hora de pagar
+No BoxMonitor, as oficinas aparecem pela avaliação.  | Tela: Oficinas por avaliação
+De quem deixou o carro lá e retirou.  | Tela: De quem deixou o carro
+Quatro vírgula oito, trinta e duas avaliações.  | Tela: 4,8 com 32 avaliações
+Escolhe o horário livre e agenda ali mesmo.  | Tela: Agenda ali mesmo
+Sem chute e sem cunhado, sabe?  | Tela: Sem chute
+Salva esse antes de escolher a próxima oficina.  | Tela: Salva esse
