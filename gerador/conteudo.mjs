@@ -90,8 +90,38 @@ ${HASHTAGS_PRODUTO}`,
 
   // ───────── SEMANA 2 ─────────
   {
+    // Só é publicado quando existir videos/<slug>.mp4 (1080x1920, legenda queimada).
+    slug: "04-2026-11-09-seg-reel-ja-ficou-pronto",
+    kind: "reel",
+    cover: { kicker: "Reel", title: "*“Já ficou pronto?”* 3 vezes hoje" },
+    script: [
+      "(0:00) \"Já ficou pronto?\" 3 vezes hoje.  | Tela: “JÁ FICOU PRONTO?” 3x HOJE (celular tocando na bancada)",
+      "(0:02) E aí você larga a chave 10 pra atender.  | Mão suja largando a chave",
+      "(0:06) Não é pressa, cara.  | Tela: NÃO É PRESSA",
+      "(0:07) Ele só não sabe o que tão fazendo com o Gol dele, sabe?  | Tela: ELE NÃO SABE O QUE ROLA",
+      "(0:13) No BoxMonitor cada etapa vira status.  | Tela: CADA ETAPA VIRA STATUS (gravação de tela)",
+      "(0:16) Recebido. Diagnóstico. Orçamento.  | Tela: RECEBIDO. DIAGNÓSTICO. ORÇAMENTO.",
+      "(0:18) Foto da pastilha do Gol, ele aprova pelo celular.  | Tela: FOTO + APROVAÇÃO NO CELULAR",
+      "(0:21) Chega por e-mail e notificação.",
+      "(0:24) Terminou? Marca pronto pra retirar.  | Tela: PRONTO PRA RETIRAR",
+      "(0:26) Cadastre sua oficina pelo link da bio.  | Tela: CADASTRE SUA OFICINA",
+      "(0:28) Ele para de ligar pra saber se ficou pronto.",
+    ],
+    caption: `Cliente que liga toda hora não tá com pressa. Tá sem notícia. Cadastre sua oficina pelo link da bio.
+
+O BoxMonitor é um sistema para oficina mecânica que avisa o cliente sozinho. Cada etapa vira status: recebido, diagnóstico, orçamento, pronto pra retirar.
+
+Você manda a foto do problema e ele aprova o orçamento pelo celular, antes do serviço começar. O aviso chega por e-mail e notificação.
+
+E do seu lado tem ordem de serviço, estoque e serviços já cadastrados. Menos telefone tocando, mais carro saindo.
+
+#oficinamecanica #mecanicoautomotivo #gestaodeoficina`,
+  },
+  {
     slug: "04-2026-11-09-seg-carrossel-orcamento",
     kind: "carousel",
+    // O Reel do dia sai às 12h; o carrossel fica para a execução das 15h.
+    publishTime: "15:00:00-03:00",
     slides: [
       { type: "cover", kicker: "Orçamento", title: "“Eu *não autorizei* isso!”", body: "Como acabar com essa discussão." },
       { type: "item", number: "1", title: "Aprovação *de boca* não vale nada", body: "Na hora de pagar, é a sua palavra contra a do cliente." },

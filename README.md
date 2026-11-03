@@ -7,7 +7,7 @@ Artes, legendas e publicação automática do Instagram do BoxMonitor.
 - `publicar.mjs`: publica o próximo post vencido da `agenda.json` (1 por execução) e registra em `publicados.json`.
 - `.github/workflows/publicar.yml`: roda o `publicar.mjs` todo dia às 12:07 (Brasília).
 
-Posts com `kind: "reel"` em `conteudo.mjs` **não** são publicados automaticamente: só a capa e o roteiro ficam em `posts/`.
+Posts com `kind: "reel"` em `conteudo.mjs` geram capa e roteiro em `posts/` e entram na agenda, mas só são publicados quando o vídeo existir em `videos/<slug>.mp4` (MP4 1080x1920, até 15 min). Sem o vídeo, o Reel fica aguardando e os outros posts seguem normalmente; se o vídeo chegar depois da data, ele sai na próxima execução. O vídeo é enviado direto para a Meta (upload resumable), sem depender do raw do GitHub. Um post pode ter horário próprio com `publishTime` (ex.: `"15:00:00-03:00"`).
 
 ## Mudar textos ou datas
 

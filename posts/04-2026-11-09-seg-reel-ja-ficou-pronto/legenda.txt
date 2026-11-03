@@ -1,0 +1,9 @@
+Cliente que liga toda hora não tá com pressa. Tá sem notícia. Cadastre sua oficina pelo link da bio.
+
+O BoxMonitor é um sistema para oficina mecânica que avisa o cliente sozinho. Cada etapa vira status: recebido, diagnóstico, orçamento, pronto pra retirar.
+
+Você manda a foto do problema e ele aprova o orçamento pelo celular, antes do serviço começar. O aviso chega por e-mail e notificação.
+
+E do seu lado tem ordem de serviço, estoque e serviços já cadastrados. Menos telefone tocando, mais carro saindo.
+
+#oficinamecanica #mecanicoautomotivo #gestaodeoficina

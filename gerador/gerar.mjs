@@ -190,15 +190,26 @@ for (const post of posts) {
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
 
-  if (post.kind === "reel") {
-    screenshot(renderReelCover(post.cover), `${post.slug}-capa`, REEL, join(dir, "capa.png"));
-    writeFileSync(join(dir, "roteiro.txt"), `ROTEIRO DO REEL\n\n${post.script.join("\n")}\n`);
-  }
   writeFileSync(join(dir, "legenda.txt"), `${post.caption}\n`);
 
   const [, year, month, day] = post.slug.match(/^\d+-(\d{4})-(\d{2})-(\d{2})/);
+  const publishTime = post.publishTime ?? PUBLISH_TIME;
+  const publishAt = `${year}-${month}-${day}T${publishTime}`;
 
-  if (post.kind !== "reel") {
+  if (post.kind === "reel") {
+    const cover = join(dir, "capa.png");
+    screenshot(renderReelCover(post.cover), `${post.slug}-capa`, REEL, cover);
+    await toJpeg(cover);
+    writeFileSync(join(dir, "roteiro.txt"), `ROTEIRO DO REEL\n\n${post.script.join("\n")}\n`);
+    // O vídeo fica fora de posts/ porque esta pasta é apagada a cada geração.
+    agenda.push({
+      slug: post.slug,
+      publishAt,
+      video: `videos/${post.slug}.mp4`,
+      cover: `posts/${post.slug}/capa.jpg`,
+      caption: post.caption,
+    });
+  } else {
     const images = [];
     for (const [index, slide] of post.slides.entries()) {
       const counter = post.slides.length > 1 ? `${pad(index + 1)}/${pad(post.slides.length)}` : "";
@@ -208,14 +219,16 @@ for (const post of posts) {
       await toJpeg(png);
       images.push(`posts/${post.slug}/${pad(index + 1)}.jpg`);
     }
-    agenda.push({ slug: post.slug, publishAt: `${year}-${month}-${day}T${PUBLISH_TIME}`, images, caption: post.caption });
+    agenda.push({ slug: post.slug, publishAt, images, caption: post.caption });
   }
 
-  const format = { reel: "Reel (gravar vídeo; capa pronta)", carousel: "Carrossel", single: "Post único" }[post.kind];
-  schedule.push(`${day}/${month}/${year}  ${format.padEnd(34)} posts/${post.slug}${post.pin ? "  ← fixar no perfil" : ""}`);
+  const format = { reel: "Reel (vídeo em videos/)", carousel: "Carrossel", single: "Post único" }[post.kind];
+  schedule.push(
+    `${day}/${month}/${year} ${publishTime.slice(0, 5)}  ${format.padEnd(34)} posts/${post.slug}${post.pin ? "  ← fixar no perfil" : ""}`,
+  );
   console.log(`ok  ${post.slug}`);
 }
 
 writeFileSync(join(ROOT, "CRONOGRAMA.txt"), `CRONOGRAMA INSTAGRAM BOXMONITOR (novembro/2026)\n\n${schedule.join("\n")}\n`);
-// Lida pelo publicar.mjs (GitHub Actions). Reels ficam de fora: são postados à mão.
+// Lida pelo publicar.mjs (GitHub Actions).
 writeFileSync(join(ROOT, "agenda.json"), `${JSON.stringify(agenda, null, 2)}\n`);

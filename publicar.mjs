@@ -6,6 +6,9 @@
 //   IG_ACCESS_TOKEN  token com instagram_basic e instagram_content_publish
 //   MEDIA_BASE_URL   (opcional) URL pública onde estão as imagens; padrão: raw do GitHub da branch main
 //
+// Reels (posts com `video` na agenda) só saem quando o arquivo existe em videos/; o vídeo é enviado
+// direto para a Meta e a capa vai por URL.
+//
 // Uso: node publicar.mjs [--dry-run]
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -17,6 +20,8 @@ const PUBLISHED_PATH = join(ROOT, "publicados.json");
 const GRAPH = "https://graph.facebook.com/v25.0";
 const CONTAINER_POLL_MS = 5_000;
 const CONTAINER_MAX_POLLS = 36; // 3 minutos
+const REEL_MAX_POLLS = 120; // 10 minutos: vídeo demora mais para processar
+const RUPLOAD = "https://rupload.facebook.com/ig-api-upload/v25.0";
 
 const isDryRun = process.argv.includes("--dry-run");
 
@@ -24,12 +29,19 @@ const agenda = JSON.parse(readFileSync(AGENDA_PATH, "utf8"));
 const published = existsSync(PUBLISHED_PATH) ? JSON.parse(readFileSync(PUBLISHED_PATH, "utf8")) : {};
 
 const now = new Date();
-const due = agenda
+const overdue = agenda
   .filter((post) => !published[post.slug] && new Date(post.publishAt) <= now)
   .sort((a, b) => new Date(a.publishAt) - new Date(b.publishAt));
 
+// Reel só sai quando o vídeo já está no repositório; enquanto isso, os outros posts seguem.
+const hasMedia = (post) => !post.video || existsSync(join(ROOT, post.video));
+for (const post of overdue.filter((post) => !hasMedia(post))) {
+  console.log(`Aguardando ${post.video}: ${post.slug} fica para quando o vídeo for enviado.`);
+}
+const due = overdue.filter(hasMedia);
+
 if (due.length === 0) {
-  const next = agenda.find((post) => !published[post.slug]);
+  const next = agenda.find((post) => !published[post.slug] && hasMedia(post));
   console.log(next ? `Nada vencido. Próximo: ${next.slug} em ${next.publishAt}.` : "Agenda concluída.");
   process.exit(0);
 }
@@ -40,8 +52,12 @@ const mediaBase =
   (process.env.GITHUB_REPOSITORY ? `https://raw.githubusercontent.com/${process.env.GITHUB_REPOSITORY}/main/` : undefined);
 
 if (isDryRun) {
-  console.log(`[dry-run] Publicaria ${post.slug} (${post.images.length} imagem/ns):`);
-  for (const image of post.images) console.log(`  ${mediaBase ?? "<MEDIA_BASE_URL>"}${image}`);
+  if (post.video) {
+    console.log(`[dry-run] Publicaria o Reel ${post.slug}: ${post.video} (upload direto), capa ${mediaBase ?? "<MEDIA_BASE_URL>"}${post.cover}`);
+  } else {
+    console.log(`[dry-run] Publicaria ${post.slug} (${post.images.length} imagem/ns):`);
+    for (const image of post.images) console.log(`  ${mediaBase ?? "<MEDIA_BASE_URL>"}${image}`);
+  }
   if (due.length > 1) console.log(`[dry-run] Outros ${due.length - 1} vencidos ficam para as próximas execuções.`);
   process.exit(0);
 }
@@ -66,8 +82,8 @@ const graph = async (method, path, params = {}) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // A Meta baixa e processa a mídia de forma assíncrona; só dá para publicar com status FINISHED.
-const waitUntilReady = async (containerId) => {
-  for (let poll = 0; poll < CONTAINER_MAX_POLLS; poll++) {
+const waitUntilReady = async (containerId, maxPolls = CONTAINER_MAX_POLLS) => {
+  for (let poll = 0; poll < maxPolls; poll++) {
     const { status_code: status } = await graph("GET", containerId, { fields: "status_code" });
     if (status === "FINISHED") return;
     if (status === "ERROR" || status === "EXPIRED") throw new Error(`Container ${containerId} com status ${status}.`);
@@ -76,10 +92,35 @@ const waitUntilReady = async (containerId) => {
   throw new Error(`Container ${containerId} não ficou pronto a tempo.`);
 };
 
-const imageUrls = post.images.map((image) => `${mediaBase}${image}`);
+// O raw do GitHub serve MP4 como application/octet-stream; por isso o vídeo vai por upload direto (resumable).
+const uploadReel = async () => {
+  const { id } = await graph("POST", `${IG_USER_ID}/media`, {
+    media_type: "REELS",
+    upload_type: "resumable",
+    caption: post.caption,
+    cover_url: `${mediaBase}${post.cover}`,
+    share_to_feed: "true",
+  });
+  const video = readFileSync(join(ROOT, post.video));
+  const res = await fetch(`${RUPLOAD}/${id}`, {
+    method: "POST",
+    headers: { Authorization: `OAuth ${IG_ACCESS_TOKEN}`, offset: "0", file_size: String(video.length) },
+    body: video,
+  });
+  const json = await res.json();
+  if (!res.ok || !json.success) {
+    throw new Error(`Upload do vídeo ${post.video}: ${json.debug_info?.message ?? res.statusText}`);
+  }
+  await waitUntilReady(id, REEL_MAX_POLLS);
+  return id;
+};
+
+const imageUrls = (post.images ?? []).map((image) => `${mediaBase}${image}`);
 let creationId;
 
-if (imageUrls.length === 1) {
+if (post.video) {
+  creationId = await uploadReel();
+} else if (imageUrls.length === 1) {
   ({ id: creationId } = await graph("POST", `${IG_USER_ID}/media`, { image_url: imageUrls[0], caption: post.caption }));
 } else {
   const children = [];
