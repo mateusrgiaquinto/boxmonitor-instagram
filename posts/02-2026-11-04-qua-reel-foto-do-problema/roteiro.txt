@@ -3,11 +3,11 @@ ROTEIRO DO REEL
 Para de explicar pastilha por telefone.  | Tela: Para de explicar por telefone
 Manda uma foto.  | Tela: Manda 1 foto
 Cliente não entende “tá no limite”, cara.  | Tela: “Tá no limite”? Ele não entende
-Ele entende a foto da pastilha com dois milímetros.  | Tela: Pastilha com 2 mm
+Ele entende a foto da pastilha com... dois milímetros.  | Tela: Pastilha com 2 mm
 No BoxMonitor, você põe o carro em diagnóstico  | Tela: Carro em diagnóstico
 e anexa a foto ali mesmo, na etapa.  | Tela: Foto na etapa
 Aí o orçamento chega no celular do cliente  | Tela: Orçamento no celular
 junto com a foto do problema.  | Tela: Orçamento + foto
-Ele vê, entende e aprova pelo celular.  | Tela: Aprova pelo celular
+Ele vê, entende... e aprova pelo celular.  | Tela: Aprova pelo celular
 Ninguém discute com uma foto, sabe?  | Tela: Ninguém discute com foto
 Manda pro mecânico que ainda explica por telefone.  | Tela: Manda pro mecânico

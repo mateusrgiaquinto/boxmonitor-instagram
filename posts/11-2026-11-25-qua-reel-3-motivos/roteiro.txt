@@ -1,11 +1,11 @@
 ROTEIRO DO REEL
 
 Três motivos pro seu cliente não voltar.  | Tela: 3 motivos pra não voltar
-O número um não é o preço.  | Tela: O nº 1 não é preço
+O número um... não é o preço.  | Tela: O nº 1 não é preço
 Número três: ele esqueceu da revisão.  | Tela: #3 Esqueceu da revisão
 Ninguém lembrou ele.  | Tela: Ninguém lembrou
 Número dois: o orçamento cresceu na hora de pagar.  | Tela: #2 Orçamento cresceu
-Ele se sentiu enganado, mesmo sem ter sido.  | Tela: Se sentiu enganado
+Ele se sentiu enganado... mesmo sem ter sido.  | Tela: Se sentiu enganado
 Número um: ele ficou dois dias sem notícia do carro.  | Tela: #1 2 dias sem notícia
 Ligou, ninguém atendeu, sabe?  | Tela: Ligou. Ninguém atendeu.
 O BoxMonitor resolve os três:  | Tela: O BoxMonitor resolve os 3

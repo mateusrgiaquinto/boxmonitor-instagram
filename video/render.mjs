@@ -27,9 +27,12 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(HERE);
 const HYPERFRAMES = "npx --yes hyperframes@0.9.8";
 const ELEVENLABS = "https://api.elevenlabs.io/v1";
-const TTS_MODEL = "eleven_multilingual_v2";
+// Eleven v4 lê as marcações de atuação da fala ([sighs], [frustrated], [playfully]…); estabilidade baixa = mais emoção.
+const TTS_MODEL = "eleven_v4";
 const VOICE_ID = "YU8EsJtXFMyKMxYtheDk"; // voz do BoxMonitor na ElevenLabs (plano Starter, uso comercial)
-const VOICE_SETTINGS = { stability: 0.45, similarity_boost: 0.8, style: 0.3, use_speaker_boost: true, speed: 1.05 };
+const VOICE_SETTINGS = { stability: 0.3, similarity_boost: 0.8 };
+// Marcação de atuação dentro da fala: vai para a voz, nunca para a legenda.
+const ACTING_TAG = /\[[^\]]*\]/;
 const END_HOLD_SECONDS = 1.2; // o último card fica na tela antes do loop
 const VOICE_VOLUME = 1.25;
 const MUSIC_VOLUME = 0.28; // trilha uns 5 dB abaixo da voz: presente, sem cobrir a fala
@@ -76,13 +79,13 @@ const narrate = async (post, dir) => {
   const text = post.beats.map((beat) => beat.say).join(" ");
   const metaPath = join(dir, "narracao.json");
   const cached = readJson(metaPath);
-  const settings = JSON.stringify(VOICE_SETTINGS);
+  const settings = JSON.stringify({ model: TTS_MODEL, ...VOICE_SETTINGS });
   if (cached?.text === text && cached.voice === VOICE_ID && cached.settings === settings) return cached;
 
   const res = await fetch(`${ELEVENLABS}/text-to-speech/${VOICE_ID}/with-timestamps`, {
     method: "POST",
     headers: { "xi-api-key": ELEVENLABS_API_KEY, "content-type": "application/json" },
-    body: JSON.stringify({ text, model_id: TTS_MODEL, voice_settings: VOICE_SETTINGS }),
+    body: JSON.stringify({ text, model_id: TTS_MODEL, language_code: "pt", voice_settings: VOICE_SETTINGS }),
   });
   if (!res.ok) throw new Error(`ElevenLabs (voz) ${res.status}: ${await res.text()}`);
   const json = await res.json();
@@ -139,13 +142,17 @@ const timeline = (post, voice) => {
   return {
     total,
     beats: beats.map(({ beat, offset: charOffset }, index) => {
-      const start = index === 0 ? 0 : sec(voice.charStarts[charOffset]);
-      const end = index === beats.length - 1 ? total : sec(voice.charStarts[beats[index + 1].offset]);
-      const words = [...beat.say.matchAll(/\S+/g)].map((match) => ({
-        text: match[0],
-        start: sec(voice.charStarts[charOffset + match.index]),
-        end: sec(voice.charEnds[charOffset + match.index + match[0].length - 1]),
-      }));
+      const wordsOf = (item) => [...item.beat.say.matchAll(/\[[^\]]*\]|\S+/g)]
+        .filter((match) => !ACTING_TAG.test(match[0]))
+        .map((match) => ({
+          text: match[0],
+          start: sec(voice.charStarts[item.offset + match.index]),
+          end: sec(voice.charEnds[item.offset + match.index + match[0].length - 1]),
+        }));
+      // O beat começa na primeira palavra falada (as marcações de atuação não contam).
+      const words = wordsOf({ beat, offset: charOffset });
+      const start = index === 0 ? 0 : words[0].start;
+      const end = index === beats.length - 1 ? total : wordsOf(beats[index + 1])[0].start;
       // Tela que muda durante a fala: cada estado entra no começo da frase correspondente; senão, tempo dividido por igual.
       const telas = beat.tela ? [beat.tela].flat() : [];
       const sentences = beat.say.split(/(?<=[.!?])\s+/);

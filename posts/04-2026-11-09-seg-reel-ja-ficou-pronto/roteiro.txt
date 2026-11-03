@@ -1,7 +1,7 @@
 ROTEIRO DO REEL
 
-Já ficou pronto? 3 vezes hoje.  | Tela: “Já ficou pronto?” 3x hoje
-E aí você larga a chave 10 pra atender.  | Tela: Larga a chave 10
+“Já ficou pronto?” Três vezes hoje.  | Tela: “Já ficou pronto?” 3x hoje
+E aí você larga a chave dez pra atender.  | Tela: Larga a chave 10
 Não é pressa, cara.  | Tela: Não é pressa
 Ele só não sabe o que tão fazendo com o Gol dele, sabe?  | Tela: Ele não sabe o que rola
 No BoxMonitor, cada etapa vira status.  | Tela: Cada etapa vira status
@@ -10,4 +10,4 @@ Foto da pastilha do Gol, ele aprova pelo celular.  | Tela: Foto + aprovação no
 Chega por e-mail e notificação.  | Tela: E-mail e notificação
 Terminou? Marca pronto pra retirar.  | Tela: Pronto pra retirar
 Cadastre sua oficina pelo link da bio.  | Tela: Cadastre sua oficina
-Ele para de ligar pra saber se ficou pronto.  | Tela: Ficou pronto.
+E ele para de ligar pra saber se ficou pronto.  | Tela: Ficou pronto.

@@ -2,7 +2,7 @@ ROTEIRO DO REEL
 
 Seis meses sem trocar o óleo?  | Tela: 6 meses sem trocar óleo?
 Seu cliente não sumiu, cara. Esqueceu.  | Tela: Ele não sumiu. Esqueceu.
-E quem lembra ele primeiro leva o serviço.  | Tela: Quem lembra primeiro leva
+E quem lembra ele primeiro... leva o serviço.  | Tela: Quem lembra primeiro leva
 No BoxMonitor, você cadastra a troca de óleo  | Tela: Cadastra a troca de óleo
 com a periodicidade, tipo a cada seis meses.  | Tela: A cada 6 meses
 Aí, tipo quinze dias antes de vencer,  | Tela: 15 dias antes
