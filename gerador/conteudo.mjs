@@ -90,22 +90,23 @@ ${HASHTAGS_PRODUTO}`,
 
   // ───────── SEMANA 2 ─────────
   {
-    // Só é publicado quando existir videos/<slug>.mp4 (1080x1920, legenda queimada).
+    // O vídeo sai de `npm run video` (voz ElevenLabs + cards) em videos/<slug>.mp4; só é publicado se existir.
+    // Cada beat: `say` é a fala (vira áudio e legenda), `card` é o texto grande na tela.
     slug: "04-2026-11-09-seg-reel-ja-ficou-pronto",
     kind: "reel",
     cover: { kicker: "Reel", title: "*“Já ficou pronto?”* 3 vezes hoje" },
-    script: [
-      "(0:00) \"Já ficou pronto?\" 3 vezes hoje.  | Tela: “JÁ FICOU PRONTO?” 3x HOJE (celular tocando na bancada)",
-      "(0:02) E aí você larga a chave 10 pra atender.  | Mão suja largando a chave",
-      "(0:06) Não é pressa, cara.  | Tela: NÃO É PRESSA",
-      "(0:07) Ele só não sabe o que tão fazendo com o Gol dele, sabe?  | Tela: ELE NÃO SABE O QUE ROLA",
-      "(0:13) No BoxMonitor cada etapa vira status.  | Tela: CADA ETAPA VIRA STATUS (gravação de tela)",
-      "(0:16) Recebido. Diagnóstico. Orçamento.  | Tela: RECEBIDO. DIAGNÓSTICO. ORÇAMENTO.",
-      "(0:18) Foto da pastilha do Gol, ele aprova pelo celular.  | Tela: FOTO + APROVAÇÃO NO CELULAR",
-      "(0:21) Chega por e-mail e notificação.",
-      "(0:24) Terminou? Marca pronto pra retirar.  | Tela: PRONTO PRA RETIRAR",
-      "(0:26) Cadastre sua oficina pelo link da bio.  | Tela: CADASTRE SUA OFICINA",
-      "(0:28) Ele para de ligar pra saber se ficou pronto.",
+    beats: [
+      { say: "Já ficou pronto? 3 vezes hoje.", card: "*“Já ficou pronto?”* 3x hoje" },
+      { say: "E aí você larga a chave 10 pra atender.", card: "Larga a *chave 10*" },
+      { say: "Não é pressa, cara.", card: "Não é *pressa*" },
+      { say: "Ele só não sabe o que tão fazendo com o Gol dele, sabe?", card: "Ele não sabe *o que rola*" },
+      { say: "No BoxMonitor, cada etapa vira status.", card: "Cada etapa vira *status*" },
+      { say: "Recebido. Diagnóstico. Orçamento.", card: "Recebido. Diagnóstico. *Orçamento.*" },
+      { say: "Foto da pastilha do Gol, ele aprova pelo celular.", card: "Foto + *aprovação* no celular" },
+      { say: "Chega por e-mail e notificação.", card: "E-mail e *notificação*" },
+      { say: "Terminou? Marca pronto pra retirar.", card: "*Pronto* pra retirar" },
+      { say: "Cadastre sua oficina pelo link da bio.", card: "Cadastre sua *oficina*" },
+      { say: "Ele para de ligar pra saber se ficou pronto.", card: "Ficou *pronto*." },
     ],
     caption: `Cliente que liga toda hora não tá com pressa. Tá sem notícia. Cadastre sua oficina pelo link da bio.
 

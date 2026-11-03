@@ -200,7 +200,7 @@ for (const post of posts) {
     const cover = join(dir, "capa.png");
     screenshot(renderReelCover(post.cover), `${post.slug}-capa`, REEL, cover);
     await toJpeg(cover);
-    writeFileSync(join(dir, "roteiro.txt"), `ROTEIRO DO REEL\n\n${post.script.join("\n")}\n`);
+    writeFileSync(join(dir, "roteiro.txt"), `ROTEIRO DO REEL\n\n${post.beats.map((beat) => `${beat.say}  | Tela: ${beat.card.replace(/\*/g, "")}`).join("\n")}\n`);
     // O vídeo fica fora de posts/ porque esta pasta é apagada a cada geração.
     agenda.push({
       slug: post.slug,
